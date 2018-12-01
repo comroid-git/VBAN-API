@@ -1,5 +1,15 @@
 .gradle
-/build/
+build/
+out/
+.idea/
+/out/
+CrystalShard.iml
+*.jar
+*.class
+
+!Core-11.iml
+!Internal-11.iml
+!Main.iml
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -12,3 +22,10 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# Local testing environment of Kaleidox
+/Core-11/src/test/
+
+*.cred
+*.asc
+gradle/wrapper/gradle-wrapper.properties
