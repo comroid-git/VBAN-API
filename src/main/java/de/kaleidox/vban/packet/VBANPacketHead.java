@@ -1,8 +1,8 @@
 package de.kaleidox.vban.packet;
 
-import org.intellij.lang.annotations.MagicConstant;
-
 import de.kaleidox.util.interfaces.ByteArray;
+
+import org.intellij.lang.annotations.MagicConstant;
 
 import static de.kaleidox.util.Util.appendByteArray;
 import static de.kaleidox.util.Util.minSizeArray;
