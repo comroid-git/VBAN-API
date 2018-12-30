@@ -96,56 +96,63 @@ public class VBANPacketHead implements ByteArray {
                 return protocol;
             }
 
-            public void setProtocol(int protocol) {
+            public Builder setProtocol(int protocol) {
                 this.protocol = protocol;
+                return this;
             }
 
             public int getSampleRate() {
                 return sampleRate;
             }
 
-            public void setSampleRate(int sampleRate) {
+            public Builder setSampleRate(int sampleRate) {
                 this.sampleRate = sampleRate;
+                return this;
             }
 
             public byte getSamples() {
                 return samples;
             }
 
-            public void setSamples(byte samples) {
+            public Builder setSamples(byte samples) {
                 this.samples = samples;
+                return this;
             }
 
             public byte getChannel() {
                 return channel;
             }
 
-            public void setChannel(byte channel) {
+            public Builder setChannel(byte channel) {
                 this.channel = channel;
+                return this;
             }
 
             public int getFormat() {
                 return format;
             }
 
-            public void setFormat(int format) {
+            public Builder setFormat(int format) {
                 this.format = format;
+                return this;
             }
 
             public int getCodec() {
                 return codec;
             }
 
-            public void setCodec(int codec) {
+            public Builder setCodec(int codec) {
                 this.codec = codec;
+                return this;
             }
 
             public String getStreamName() {
                 return streamName;
             }
 
-            public void setStreamName(String streamName) {
+            public Builder setStreamName(String streamName) {
                 this.streamName = streamName;
+                return this;
             }
 
             @SuppressWarnings("MagicConstant")

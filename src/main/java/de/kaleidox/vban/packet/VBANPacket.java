@@ -54,8 +54,9 @@ public class VBANPacket implements ByteArray {
                 return headFactory;
             }
 
-            public void setHeadFactory(VBANPacketHead.Factory headFactory) {
+            public Builder setHeadFactory(VBANPacketHead.Factory headFactory) {
                 this.headFactory = headFactory;
+                return this;
             }
 
             @Override
