@@ -5,7 +5,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,12 +25,7 @@ public class VBAN<S> {
     private final ExecutorService executor;
     private final LinkedBlockingQueue<S> dataQueue;
 
-    public VBAN(DataRecievedHandler handler, VBANPacket.Factory packetFactory, InetAddress address, int port)
-            throws SocketException {
-        this(handler, packetFactory, new InetSocketAddress(address, port));
-    }
-
-    public VBAN(DataRecievedHandler handler, VBANPacket.Factory packetFactory, InetSocketAddress socketAddress)
+    private VBAN(DataRecievedHandler handler, VBANPacket.Factory packetFactory, InetSocketAddress socketAddress)
             throws SocketException {
         this.handler = handler;
         this.packetFactory = packetFactory;
@@ -56,14 +50,13 @@ public class VBAN<S> {
     }
 
     public static VBAN<String> openTextStream(DataRecievedHandler handler, InetAddress address, int port)
-            throws UnknownHostException, SocketException {
+            throws SocketException {
         return new VBAN<>(
                 handler,
                 VBANPacket.Factory.builder()
                         .setHeadFactory(VBANPacketHead.defaultTextProtocolFactory())
                         .build(),
-                InetAddress.getLocalHost(),
-                DEFAULT_PORT
+                new InetSocketAddress(address, port)
         );
     }
 
