@@ -1,6 +1,10 @@
 package de.kaleidox.vban.packet;
 
 import de.kaleidox.util.interfaces.ByteArray;
+import de.kaleidox.vban.Codec;
+import de.kaleidox.vban.Format;
+import de.kaleidox.vban.Protocol;
+import de.kaleidox.vban.SampleRate;
 
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -36,6 +40,42 @@ public class VBANPacketHead implements ByteArray {
     @Override
     public byte[] getBytes() {
         return bytes;
+    }
+
+    public static Factory defaultAudioProtocolFactory(int channel) {
+        return VBANPacketHead.Factory.builder()
+                .setProtocol(Protocol.AUDIO)
+                .setChannel((byte) channel)
+                .setSamples((byte) 255)
+                .build();
+    }
+
+    public static Factory defaultTextProtocolFactory() {
+        return VBANPacketHead.Factory.builder()
+                .setProtocol(Protocol.TEXT)
+                .setChannel((byte) 0)
+                .setSamples((byte) 0)
+                .build();
+    }
+
+    public static Factory defaultSerialProtocolFactory() throws UnsupportedOperationException {
+        //noinspection ConstantConditions TODO Implement Serial Communication
+        if (true) throw new UnsupportedOperationException();
+        return VBANPacketHead.Factory.builder()
+                .setProtocol(Protocol.SERIAL)
+                .setChannel((byte) 0)
+                .setSamples((byte) 0)
+                .build();
+    }
+
+    public static Factory defaultServiceProtocolFactory() throws UnsupportedOperationException {
+        //noinspection ConstantConditions TODO Implement Service Communication
+        if (true) throw new UnsupportedOperationException();
+        return VBANPacketHead.Factory.builder()
+                .setProtocol(Protocol.SERVICE)
+                .setChannel((byte) 0)
+                .setSamples((byte) 0)
+                .build();
     }
 
     public static class Factory implements de.kaleidox.util.interfaces.Factory<VBANPacketHead> {
