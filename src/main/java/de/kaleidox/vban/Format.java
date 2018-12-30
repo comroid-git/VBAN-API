@@ -1,6 +1,6 @@
-package de.kaleidox.vban.packet;
+package de.kaleidox.vban;
 
-public class Format {
+public final class Format {
     public final static int BYTE8 = 0x00;
     public final static int INT16 = 0x01;
     public final static int INT24 = 0x02;

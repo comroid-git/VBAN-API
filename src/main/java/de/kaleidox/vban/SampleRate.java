@@ -1,6 +1,6 @@
-package de.kaleidox.vban.packet;
+package de.kaleidox.vban;
 
-public class SampleRate {
+public final class SampleRate {
     public final static int hz6000 = 0;
     public final static int hz12000 = 1;
     public final static int hz24000 = 2;

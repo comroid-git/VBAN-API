@@ -1,6 +1,6 @@
-package de.kaleidox.vban.packet;
+package de.kaleidox.vban;
 
-public class Codec {
+public final class Codec {
     public final static int PCM = 0x00;
     public final static int VBCA = 0x10; // VB-Audio AOIP Codec
     public final static int VBCV = 0x20; // VB-Audio VOIP Codec
