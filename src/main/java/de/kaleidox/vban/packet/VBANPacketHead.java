@@ -2,34 +2,35 @@ package de.kaleidox.vban.packet;
 
 import org.intellij.lang.annotations.MagicConstant;
 
-import de.kaleidox.util.interfaces.ByteObject;
+import de.kaleidox.util.interfaces.ByteArray;
 
 import static de.kaleidox.util.Util.appendByteArray;
-import static de.kaleidox.util.Util.makeByteArray;
 import static de.kaleidox.util.Util.minSizeArray;
 import static de.kaleidox.util.Util.stringToBytesASCII;
 
-public class VBANPacketHead implements ByteObject {
+public class VBANPacketHead implements ByteArray {
     public final static int SIZE = 28;
 
     private final byte[] bytes;
 
-    public VBANPacketHead(@MagicConstant(flagsFromClass = Protocol.class) int protocol,
-                          @MagicConstant(flagsFromClass = SampleRate.class) int sampleRateIndex,
-                          byte samples,
-                          byte channel,
-                          @MagicConstant(flagsFromClass = Format.class) int format,
-                          @MagicConstant(flagsFromClass = Codec.class) int codec,
-                          String streamName,
-                          int frameCounter) {
-        bytes = new byte[SIZE];
-        appendByteArray(bytes, 0, "VBAN".getBytes());
-        appendByteArray(bytes, 4, makeByteArray(sampleRateIndex | protocol));
-        appendByteArray(bytes, 5, samples);
-        appendByteArray(bytes, 6, channel);
-        appendByteArray(bytes, 7, makeByteArray(format | codec));
-        appendByteArray(bytes, 8, minSizeArray(stringToBytesASCII(streamName), 16));
-        appendByteArray(bytes, 24, (byte) frameCounter);
+    private VBANPacketHead(@MagicConstant(flagsFromClass = Protocol.class) int protocol,
+                           @MagicConstant(flagsFromClass = SampleRate.class) int sampleRateIndex,
+                           byte samples,
+                           byte channel,
+                           @MagicConstant(flagsFromClass = Format.class) int format,
+                           @MagicConstant(flagsFromClass = Codec.class) int codec,
+                           String streamName,
+                           int frameCounter) {
+        byte[] bytes = new byte[SIZE];
+
+        bytes = appendByteArray(bytes, "VBAN".getBytes());
+        bytes = appendByteArray(bytes, (byte) (sampleRateIndex | protocol));
+        bytes = appendByteArray(bytes, samples, channel);
+        bytes = appendByteArray(bytes, (byte) (format | codec));
+        bytes = appendByteArray(bytes, minSizeArray(stringToBytesASCII(streamName), 16));
+        bytes = appendByteArray(bytes, (byte) frameCounter);
+
+        this.bytes = bytes;
     }
 
     @Override
@@ -38,83 +39,122 @@ public class VBANPacketHead implements ByteObject {
     }
 
     public static class Factory implements de.kaleidox.util.interfaces.Factory<VBANPacketHead> {
+        @MagicConstant(valuesFromClass = Protocol.class)
         private final int protocol;
-        private final int sampleRateIndex;
+        @MagicConstant(valuesFromClass = SampleRate.class)
+        private final int sampleRate;
         private final byte samples;
         private final byte channel;
+        @MagicConstant(valuesFromClass = Format.class)
         private final int format;
+        @MagicConstant(valuesFromClass = Codec.class)
         private final int codec;
         private final String streamName;
-        private int counter;
+        private int counter = 0;
 
-        public Factory(String streamName, Builder builder) {
-            this.protocol = builder.protocol;
-            this.sampleRateIndex = builder.sampleRateIndex;
-            this.samples = builder.samples;
-            this.channel = builder.channel;
-            this.format = builder.format;
-            this.codec = builder.codec;
+        private Factory(int protocol, int sampleRate, byte samples, byte channel, int format, int codec, String streamName) {
+            this.protocol = protocol;
+            this.sampleRate = sampleRate;
+            this.samples = samples;
+            this.channel = channel;
+            this.format = format;
+            this.codec = codec;
             this.streamName = streamName;
-
-            this.counter = 0;
         }
 
         @Override
-        public VBANPacketHead create() {
-            return new VBANPacketHead(protocol, sampleRateIndex, samples, channel, format, codec, streamName, counter++);
+        public synchronized VBANPacketHead create() {
+            return new VBANPacketHead(protocol, sampleRate, samples, channel, format, codec, streamName, counter++);
         }
 
         @Override
-        public int counter() {
+        public synchronized int counter() {
             return counter;
         }
-    }
 
-    public static class Builder {
-        private int protocol;
-        private int sampleRateIndex;
-        private byte samples;
-        private byte channel;
-        private int format;
-        private int codec;
-
-        public Builder() {
-            protocol = Protocol.AUDIO;
-            sampleRateIndex = SampleRate.hz48000;
-            samples = (byte) 255;
-            channel = (byte) 2;
-            format = Format.INT16;
-            codec = Codec.PCM;
+        public static Builder builder() {
+            return new Builder();
         }
 
-        public Builder setProtocol(@MagicConstant(flagsFromClass = Protocol.class) int protocol) {
-            this.protocol = protocol;
-            return this;
-        }
+        public static class Builder implements de.kaleidox.util.interfaces.Builder<Factory> {
+            @MagicConstant(valuesFromClass = Protocol.class)
+            private int protocol = -1;
+            @MagicConstant(valuesFromClass = SampleRate.class)
+            private int sampleRate = SampleRate.hz48000;
+            private byte samples = -1;
+            private byte channel = 2;
+            @MagicConstant(valuesFromClass = Format.class)
+            private int format = Format.INT16;
+            @MagicConstant(valuesFromClass = Codec.class)
+            private int codec = Codec.PCM;
+            private String streamName = null;
 
-        public Builder setSampleRate(@MagicConstant(flagsFromClass = SampleRate.class) int sampleRateIndex) {
-            this.sampleRateIndex = sampleRateIndex;
-            return this;
-        }
+            private Builder() {
+            }
 
-        public Builder setSamples(byte samples) {
-            this.samples = samples;
-            return this;
-        }
+            public int getProtocol() {
+                return protocol;
+            }
 
-        public Builder setChannel(byte channel) {
-            this.channel = channel;
-            return this;
-        }
+            public void setProtocol(int protocol) {
+                this.protocol = protocol;
+            }
 
-        public Builder setFormat(@MagicConstant(flagsFromClass = Format.class) int format) {
-            this.format = format;
-            return this;
-        }
+            public int getSampleRate() {
+                return sampleRate;
+            }
 
-        public Builder setCodec(@MagicConstant(flagsFromClass = Codec.class) int codec) {
-            this.codec = codec;
-            return this;
+            public void setSampleRate(int sampleRate) {
+                this.sampleRate = sampleRate;
+            }
+
+            public byte getSamples() {
+                return samples;
+            }
+
+            public void setSamples(byte samples) {
+                this.samples = samples;
+            }
+
+            public byte getChannel() {
+                return channel;
+            }
+
+            public void setChannel(byte channel) {
+                this.channel = channel;
+            }
+
+            public int getFormat() {
+                return format;
+            }
+
+            public void setFormat(int format) {
+                this.format = format;
+            }
+
+            public int getCodec() {
+                return codec;
+            }
+
+            public void setCodec(int codec) {
+                this.codec = codec;
+            }
+
+            public String getStreamName() {
+                return streamName;
+            }
+
+            public void setStreamName(String streamName) {
+                this.streamName = streamName;
+            }
+
+            @SuppressWarnings("MagicConstant")
+            @Override
+            public Factory build() {
+                assert protocol != -1 : "Protocol is required to be set!";
+                assert samples != -1 : "Samples is required to be set!";
+                return new Factory(protocol, sampleRate, samples, channel, format, codec, streamName);
+            }
         }
     }
 }

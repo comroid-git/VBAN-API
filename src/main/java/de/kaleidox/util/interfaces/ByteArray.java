@@ -1,5 +1,5 @@
 package de.kaleidox.util.interfaces;
 
-public interface ByteObject {
+public interface ByteArray {
     byte[] getBytes();
 }

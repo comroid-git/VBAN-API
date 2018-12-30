@@ -1,6 +1,6 @@
 package de.kaleidox.util;
 
-import java.nio.ByteBuffer;
+import static java.lang.System.arraycopy;
 
 public class Util {
     public static byte[] stringToBytesASCII(String str) {
@@ -11,18 +11,18 @@ public class Util {
         return b;
     }
 
-    public static byte[] appendByteArray(byte[] target, int index, byte... append) {
-        System.arraycopy(append, 0, target, index, append.length);
-        return target;
-    }
+    public static byte[] appendByteArray(byte[] ba1, byte... ba2) {
+        byte[] bytes = new byte[ba1.length + ba2.length];
 
-    public static byte[] makeByteArray(int integer) {
-        return ByteBuffer.allocate(4).putInt(integer).array();
+        arraycopy(ba1, 0, bytes, 0, ba1.length);
+        arraycopy(ba2, 0, bytes, ba1.length, ba2.length);
+
+        return bytes;
     }
 
     public static byte[] minSizeArray(byte[] base, int size) {
         byte[] bytes = new byte[size];
-        System.arraycopy(base, 0, bytes, 0, 16);
+        arraycopy(base, 0, bytes, 0, size);
         return bytes;
     }
 }
