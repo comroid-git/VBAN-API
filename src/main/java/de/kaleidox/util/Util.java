@@ -4,6 +4,7 @@ import static java.lang.System.arraycopy;
 
 public class Util {
     public static byte[] stringToBytesASCII(String str) {
+        if (str == null) return new byte[0];
         byte[] b = new byte[str.length()];
         for (int i = 0; i < b.length; i++) {
             b[i] = (byte) str.charAt(i);
@@ -26,7 +27,7 @@ public class Util {
 
     public static byte[] minSizeArray(byte[] base, int size) {
         byte[] bytes = new byte[size];
-        arraycopy(base, 0, bytes, 0, size);
+        arraycopy(base, 0, bytes, 0, base.length);
         return bytes;
     }
 
