@@ -31,12 +31,11 @@ public class VBAN<S> {
         this.packetFactory = packetFactory;
         this.address = socketAddress.getAddress();
         this.port = socketAddress.getPort();
-        this.executor = Executors.newFixedThreadPool(2);
+        this.executor = Executors.newCachedThreadPool();
 
-        socket = new DatagramSocket();
+        socket = new DatagramSocket(socketAddress);
         dataQueue = new LinkedBlockingQueue<>();
 
-        socket.bind(socketAddress);
         executor.execute(new SenderThread());
         executor.execute(new RecieverThread());
     }
