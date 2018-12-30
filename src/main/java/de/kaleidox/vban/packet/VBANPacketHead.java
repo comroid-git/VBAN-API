@@ -55,16 +55,18 @@ public class VBANPacketHead implements ByteArray {
                 .setProtocol(Protocol.TEXT)
                 .setChannel((byte) 0)
                 .setSamples((byte) 0)
+                .setStreamName("Command1")
                 .build();
     }
 
     public static Factory defaultSerialProtocolFactory() throws UnsupportedOperationException {
         //noinspection ConstantConditions TODO Implement Serial Communication
         if (true) throw new UnsupportedOperationException();
-        return VBANPacketHead.Factory.builder()
+        return Factory.builder()
                 .setProtocol(Protocol.SERIAL)
                 .setChannel((byte) 0)
                 .setSamples((byte) 0)
+                .setFormat(Format.BYTE8)
                 .build();
     }
 
@@ -90,7 +92,7 @@ public class VBANPacketHead implements ByteArray {
         @MagicConstant(valuesFromClass = Codec.class)
         private final int codec;
         private final String streamName;
-        private int counter = 0;
+        private int counter = 1;
 
         private Factory(int protocol, int sampleRate, byte samples, byte channel, int format, int codec, String streamName) {
             this.protocol = protocol;
