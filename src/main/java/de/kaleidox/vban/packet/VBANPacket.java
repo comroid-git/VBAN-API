@@ -13,7 +13,9 @@ public class VBANPacket implements ByteArray {
         this.head = head;
     }
 
-    public VBANPacket setData(byte[] data) {
+    public VBANPacket setData(byte[] data) throws IllegalArgumentException {
+        if (data.length > MAX_SIZE)
+            throw new IllegalArgumentException("Data is too large to be sent! Must be smaller than " + MAX_SIZE);
         bytes = data;
         return this;
     }
