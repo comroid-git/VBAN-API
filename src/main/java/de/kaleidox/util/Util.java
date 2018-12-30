@@ -11,6 +11,10 @@ public class Util {
         return b;
     }
 
+    public static String bytesASCIIToString(byte[] bytes) {
+        return new String(bytes);
+    }
+
     public static byte[] appendByteArray(byte[] ba1, byte... ba2) {
         byte[] bytes = new byte[ba1.length + ba2.length];
 
@@ -24,5 +28,11 @@ public class Util {
         byte[] bytes = new byte[size];
         arraycopy(base, 0, bytes, 0, size);
         return bytes;
+    }
+
+    public static byte[] createByteArray(Object data) {
+        if (data instanceof String) {
+            return stringToBytesASCII((String) data); // todo Implement more data Types
+        } else throw new IllegalArgumentException("Unknown Data Type! Please contact the developer.");
     }
 }
