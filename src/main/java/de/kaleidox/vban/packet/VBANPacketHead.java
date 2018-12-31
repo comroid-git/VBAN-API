@@ -1,14 +1,17 @@
 package de.kaleidox.vban.packet;
 
+import de.kaleidox.util.Util;
 import de.kaleidox.util.interfaces.ByteArray;
-import de.kaleidox.vban.Codec;
-import de.kaleidox.vban.Format;
-import de.kaleidox.vban.Protocol;
-import de.kaleidox.vban.SampleRate;
+import de.kaleidox.vban.VBAN;
+import de.kaleidox.vban.VBAN.Codec;
+import de.kaleidox.vban.VBAN.Format;
+import de.kaleidox.vban.VBAN.Protocol;
+import de.kaleidox.vban.VBAN.SampleRate;
 
 import org.intellij.lang.annotations.MagicConstant;
 
 import static de.kaleidox.util.Util.appendByteArray;
+import static de.kaleidox.util.Util.intToByteArray;
 import static de.kaleidox.util.Util.minSizeArray;
 import static de.kaleidox.util.Util.stringToBytesASCII;
 
@@ -25,32 +28,16 @@ public class VBANPacketHead implements ByteArray {
                            @MagicConstant(flagsFromClass = Codec.class) int codec,
                            String streamName,
                            int frameCounter) {
-        byte[] bytes = new byte[SIZE];
-
-        // original
-        // cV cB cA cN  03 ff 01 01
-
-        // want
-        // cV cB cA cN  43 ff 01 00
-        // cC co cm cm  ca cn cd c1
-        // 00 00 00 00  00 00 00 00
-        // 00 00 00 00  00 00 00 00
-
-        byte[] bytes1 = {
-                86, 66, 65, 78, 0x44, 0x01, 0x01, 0x00,
-                67, 111, 109, 109, 97, 110, 100, 49,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-        };
+        byte[] bytes = new byte[0];
 
         bytes = appendByteArray(bytes, "VBAN".getBytes());
         bytes = appendByteArray(bytes, (byte) (protocol | sampleRateIndex));
         bytes = appendByteArray(bytes, samples, channel);
         bytes = appendByteArray(bytes, (byte) (format | codec));
         bytes = appendByteArray(bytes, minSizeArray(stringToBytesASCII(streamName), 16));
-        bytes = appendByteArray(bytes, (byte) frameCounter);
+        bytes = appendByteArray(bytes, intToByteArray(frameCounter, 4));
 
-        this.bytes = bytes1;
+        this.bytes = bytes;
     }
 
     private byte c(char v) {
@@ -86,7 +73,7 @@ public class VBANPacketHead implements ByteArray {
                 .setProtocol(Protocol.SERIAL)
                 .setChannel((byte) 0)
                 .setSamples((byte) 0)
-                .setFormat(Format.BYTE8)
+                .setFormat(VBAN.Format.BYTE8)
                 .build();
     }
 

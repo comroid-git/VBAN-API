@@ -1,5 +1,10 @@
 package de.kaleidox.util;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+import de.kaleidox.util.interfaces.ByteArray;
+
 import static java.lang.System.arraycopy;
 
 public class Util {
@@ -31,9 +36,14 @@ public class Util {
         return bytes;
     }
 
+    public static byte[] intToByteArray(int integer, int size) {
+        return ByteBuffer.allocate(size).putInt(integer).array();
+    }
+
     public static byte[] createByteArray(Object data) {
-        if (data instanceof String) {
-            return stringToBytesASCII((String) data); // todo Implement more data Types
-        } else throw new IllegalArgumentException("Unknown Data Type! Please contact the developer.");
+        // Must support types: String, ByteArray
+        if (data instanceof String) return ((String) data).getBytes(StandardCharsets.UTF_8);
+        else if (data instanceof ByteArray) return ((ByteArray) data).getBytes();
+        else throw new IllegalArgumentException("Unknown Data Type! Please contact the developer.");
     }
 }
