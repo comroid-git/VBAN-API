@@ -3,7 +3,7 @@ package de.kaleidox.util;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-import de.kaleidox.util.interfaces.ByteArray;
+import de.kaleidox.util.model.ByteArray;
 
 import static java.lang.System.arraycopy;
 

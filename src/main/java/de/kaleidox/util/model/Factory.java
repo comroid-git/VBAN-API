@@ -1,4 +1,4 @@
-package de.kaleidox.util.interfaces;
+package de.kaleidox.util.model;
 
 public interface Factory<T> {
     T create();

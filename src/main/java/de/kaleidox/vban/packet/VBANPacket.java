@@ -1,6 +1,6 @@
 package de.kaleidox.vban.packet;
 
-import de.kaleidox.util.interfaces.ByteArray;
+import de.kaleidox.util.model.ByteArray;
 
 import static de.kaleidox.util.Util.appendByteArray;
 
@@ -25,7 +25,7 @@ public class VBANPacket implements ByteArray {
         return appendByteArray(head.getBytes(), bytes);
     }
 
-    public static class Factory implements de.kaleidox.util.interfaces.Factory<VBANPacket> {
+    public static class Factory implements de.kaleidox.util.model.Factory<VBANPacket> {
         private final VBANPacketHead.Factory headFactory;
 
         private Factory(VBANPacketHead.Factory headFactory) {
@@ -46,7 +46,7 @@ public class VBANPacket implements ByteArray {
             return new Builder();
         }
 
-        public static class Builder implements de.kaleidox.util.interfaces.Builder<Factory> {
+        public static class Builder implements de.kaleidox.util.model.Builder<Factory> {
             private VBANPacketHead.Factory headFactory;
 
             private Builder() {

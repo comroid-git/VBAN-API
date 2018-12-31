@@ -1,6 +1,6 @@
 package de.kaleidox.vban.packet;
 
-import de.kaleidox.util.interfaces.ByteArray;
+import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.vban.VBAN;
 import de.kaleidox.vban.VBAN.Codec;
 import de.kaleidox.vban.VBAN.Format;
@@ -89,7 +89,7 @@ public class VBANPacketHead implements ByteArray {
                 .build();
     }
 
-    public static class Factory implements de.kaleidox.util.interfaces.Factory<VBANPacketHead> {
+    public static class Factory implements de.kaleidox.util.model.Factory<VBANPacketHead> {
         @MagicConstant(valuesFromClass = Protocol.class)
         private final int protocol;
         @MagicConstant(valuesFromClass = SampleRate.class)
@@ -127,7 +127,7 @@ public class VBANPacketHead implements ByteArray {
             return new Builder();
         }
 
-        public static class Builder implements de.kaleidox.util.interfaces.Builder<Factory> {
+        public static class Builder implements de.kaleidox.util.model.Builder<Factory> {
             @MagicConstant(valuesFromClass = Protocol.class)
             private int protocol = -1;
             @MagicConstant(valuesFromClass = SampleRate.class)
