@@ -27,14 +27,34 @@ public class VBANPacketHead implements ByteArray {
                            int frameCounter) {
         byte[] bytes = new byte[SIZE];
 
+        // original
+        // cV cB cA cN  03 ff 01 01
+
+        // want
+        // cV cB cA cN  43 ff 01 00
+        // cC co cm cm  ca cn cd c1
+        // 00 00 00 00  00 00 00 00
+        // 00 00 00 00  00 00 00 00
+
+        byte[] bytes1 = {
+                86, 66, 65, 78, 0x44, 0x01, 0x01, 0x00,
+                67, 111, 109, 109, 97, 110, 100, 49,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+
         bytes = appendByteArray(bytes, "VBAN".getBytes());
-        bytes = appendByteArray(bytes, (byte) (sampleRateIndex | protocol));
+        bytes = appendByteArray(bytes, (byte) (protocol | sampleRateIndex));
         bytes = appendByteArray(bytes, samples, channel);
         bytes = appendByteArray(bytes, (byte) (format | codec));
         bytes = appendByteArray(bytes, minSizeArray(stringToBytesASCII(streamName), 16));
         bytes = appendByteArray(bytes, (byte) frameCounter);
 
-        this.bytes = bytes;
+        this.bytes = bytes1;
+    }
+
+    private byte c(char v) {
+        return (byte) v;
     }
 
     @Override
