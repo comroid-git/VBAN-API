@@ -1,0 +1,82 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+publishing {
+    boolean snapshotPublication = rootProject.version.endsWith("SNAPSHOT")
+
+    repositories {
+        maven {
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            def releasesRepoUrl = "https://oss.sonatype.org/content/repositories/releases"
+            url = snapshotPublication ? snapshotsRepoUrl : releasesRepoUrl
+            name = "Sonatype"
+
+            credentials {
+                def uName = ""
+                def passwd = ""
+                int r
+                def stream = new FileInputStream(fileOrTempFile(".credentials/sonatype-username.cred"))
+                while ((r = stream.read()) != -1) uName = (uName + (char) r)
+                stream = new FileInputStream(fileOrTempFile(".credentials/sonatype-password.cred"))
+                while ((r = stream.read()) != -1) passwd = (passwd + (char) r)
+
+                username uName
+                password passwd
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'vban-api'
+            artifact jar
+            version = rootProject.version
+            
+            pom {
+                name = "VBAN-API"
+                description = "Java Library for handling VB-Audio's VBAN API"
+                inceptionYear = '2019'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "burdoto"
+                        name = "Tobias Burdow"
+                        email = "burdoto@outlook.com"
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:https://github.com/burdoto/VBAN-API/VBAN-API.git'
+                    developerConnection = 'scm:git:git@github.com:burdoto/VBAN-API.git'
+                    url = 'https://github.com/burdoto/VBAN-API'
+                }
+
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/burdoto/VBAN-API/issues'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    if (new File(".credentials/sonatype-password.cred").exists()) {
+        useGpgCmd()
+        for (def pub : publishing.publications)
+            sign pub
+    }
+}
+
+static File fileOrTempFile(String name) {
+    def file = new File(name)
+    if (file.exists()) return file
+    return File.createTempFile(name, "")
+}
