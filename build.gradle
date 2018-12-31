@@ -1,18 +1,37 @@
 apply plugin: 'java-library'
-apply plugin: 'groovy'
 
 group 'de.kaleidox'
-version '0.0.1'
+version '0.1.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-repositories {
-    jcenter()
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html4', true)
+    }
+    source = sourceSets.main.allJava
+    options.encoding = 'UTF-8'
+    options.destinationDirectory(new File("./docs/"))
+}
+
+repositories.jcenter()
 
 dependencies {
     compileOnly 'com.intellij:annotations:12.0'
     
     testImplementation "junit:junit:4.12"
+}
+
+if (!isTravis()) {
+    apply from: 'gradle/publishing.gradle'
+}
+
+static boolean isTravis() {
+    return System.getenv().containsKey("TRAVIS")
 }
