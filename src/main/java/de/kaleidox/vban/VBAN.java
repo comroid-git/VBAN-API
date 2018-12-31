@@ -34,7 +34,8 @@ public class VBAN<D> {
         this.address = socketAddress.getAddress();
         this.port = socketAddress.getPort();
         this.executor = new ForkJoinPool(Runtime.getRuntime().availableProcessors(), pool -> {
-            ForkJoinWorkerThread thread = new ForkJoinWorkerThread(pool){};
+            ForkJoinWorkerThread thread = new ForkJoinWorkerThread(pool) {
+            };
             thread.setDaemon(false);
             return thread;
         }, null, false);
@@ -43,7 +44,7 @@ public class VBAN<D> {
         dataQueue = new LinkedBlockingQueue<>();
 
         executor.execute(new SenderThread());
-        //executor.execute(new RecieverThread());
+        executor.execute(new RecieverThread());
     }
 
     public VBAN<D> sendData(D data) {
