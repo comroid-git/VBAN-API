@@ -27,6 +27,6 @@ public class PacketHeaderTest {
 
     @Test
     public void testHeaderSize() {
-        assertEquals(24, headFactory.create().getBytes().length);
+        assertEquals(28, headFactory.create().getBytes().length);
     }
 }
