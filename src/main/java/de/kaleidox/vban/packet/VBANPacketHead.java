@@ -1,6 +1,5 @@
 package de.kaleidox.vban.packet;
 
-import de.kaleidox.util.Util;
 import de.kaleidox.util.interfaces.ByteArray;
 import de.kaleidox.vban.VBAN;
 import de.kaleidox.vban.VBAN.Codec;
@@ -49,7 +48,9 @@ public class VBANPacketHead implements ByteArray {
         return bytes;
     }
 
-    public static Factory defaultAudioProtocolFactory(int channel) {
+    public static Factory defaultAudioProtocolFactory(int channel) throws UnsupportedOperationException {
+        //noinspection ConstantConditions TODO Implement Serial Communication
+        if (true) throw new UnsupportedOperationException();
         return VBANPacketHead.Factory.builder()
                 .setProtocol(Protocol.AUDIO)
                 .setChannel((byte) channel)
@@ -63,6 +64,7 @@ public class VBANPacketHead implements ByteArray {
                 .setChannel((byte) 0)
                 .setSamples((byte) 0)
                 .setStreamName("Command1")
+                .setSampleRate(18)
                 .build();
     }
 
