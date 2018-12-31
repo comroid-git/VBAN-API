@@ -28,4 +28,3 @@ gradle-app.setting
 
 *.cred
 *.asc
-gradle/wrapper/gradle-wrapper.properties
