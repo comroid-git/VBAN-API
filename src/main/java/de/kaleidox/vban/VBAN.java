@@ -19,7 +19,6 @@ public class VBAN<D> {
     private final int port;
     private final VBANPacket.Factory packetFactory;
     private final DatagramSocket socket;
-    private final LinkedBlockingQueue<D> dataQueue;
 
     private VBAN(VBANPacket.Factory packetFactory, InetSocketAddress socketAddress)
             throws SocketException {
@@ -28,7 +27,6 @@ public class VBAN<D> {
         this.port = socketAddress.getPort();
 
         socket = new DatagramSocket();
-        dataQueue = new LinkedBlockingQueue<>();
     }
 
     public VBAN<D> sendData(D data) {
