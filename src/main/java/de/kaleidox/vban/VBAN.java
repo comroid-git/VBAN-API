@@ -20,11 +20,10 @@ public class VBAN<D> {
     private final VBANPacket.Factory packetFactory;
     private final DatagramSocket socket;
 
-    private VBAN(VBANPacket.Factory packetFactory, InetSocketAddress socketAddress)
-            throws SocketException {
+    private VBAN(VBANPacket.Factory packetFactory, InetAddress address, int port) throws SocketException {
         this.packetFactory = packetFactory;
-        this.address = socketAddress.getAddress();
-        this.port = socketAddress.getPort();
+        this.address = address;
+        this.port = port;
 
         socket = new DatagramSocket();
     }
@@ -50,7 +49,7 @@ public class VBAN<D> {
                 VBANPacket.Factory.builder()
                         .setHeadFactory(VBANPacketHead.defaultTextProtocolFactory())
                         .build(),
-                new InetSocketAddress(address, port)
+                address, port
         );
     }
 
