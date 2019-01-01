@@ -1,17 +1,25 @@
 package de.kaleidox.test.vban;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 import de.kaleidox.vban.VBAN;
 
+import static java.net.InetAddress.getLocalHost;
+import static de.kaleidox.vban.VBAN.DEFAULT_PORT;
+
 public class ConnectionTest {
-    public static void main(String[] args) throws IOException {
-        VBAN<String> vban = VBAN.openTextStream(InetAddress.getLocalHost(), VBAN.DEFAULT_PORT);
-
-        vban.writeFlush("bus(0).mute=1".getBytes(StandardCharsets.UTF_8));
-
-        vban.sendData("bus(1).mute=0");
+    public static void main(String[] args) {
+        try (VBAN<String> vban = VBAN.openTextStream(getLocalHost(), DEFAULT_PORT)) {
+            int i = 0;
+            while (i++ < 10) {
+                vban.writeFlush("bus(0).mute=1".getBytes(StandardCharsets.UTF_8));
+                Thread.sleep(500);
+                vban.sendData("bus(0).mute=0");
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }

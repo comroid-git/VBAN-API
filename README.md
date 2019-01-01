@@ -1,4 +1,4 @@
-# VBAN-API [![Build Status](https://travis-ci.com/burdoto/VBAN-API.svg?branch=master)](https://travis-ci.com/burdoto/VBAN-API) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.kaleidox/vban-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.kaleidox/vban-api)
+# VBAN-API [![Build Status](https://travis-ci.com/burdoto/VBAN-API.svg?branch=master)](https://travis-ci.com/burdoto/VBAN-API) [![Maven Central Release](https://maven-badges.herokuapp.com/maven-central/de.kaleidox/vban-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.kaleidox/vban-api) [![Development Release](https://jitpack.io/v/burdoto/VBAN-API.svg)](https://jitpack.io/#burdoto/VBAN-API)
 API for the known VB-Audio VBAN Network interface
 
 
