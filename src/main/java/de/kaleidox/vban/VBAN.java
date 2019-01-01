@@ -30,7 +30,6 @@ public class VBAN<D> {
         dataQueue = new LinkedBlockingQueue<>();
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public VBAN<D> sendData(D data) {
         try {
             VBANPacket packet = packetFactory.create();
