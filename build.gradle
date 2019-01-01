@@ -1,7 +1,7 @@
 apply plugin: 'java-library'
 
 group 'de.kaleidox'
-version '0.1.0'
+version '0.2.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
