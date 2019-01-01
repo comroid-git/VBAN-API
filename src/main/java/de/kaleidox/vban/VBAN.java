@@ -91,7 +91,8 @@ public class VBAN<D> extends OutputStream {
         if (closed) throw new IOException("Stream is closed");
         if (buf.length > MAX_SIZE)
             throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
-        socket.send(new DatagramPacket(buf, buf.length, address, port));
+        byte[] bytes = packetFactory.create().setData(buf).getBytes();
+        socket.send(new DatagramPacket(bytes, bytes.length, address, port));
         buf = new byte[0];
     }
 
