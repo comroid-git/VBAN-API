@@ -1,5 +1,6 @@
 package de.kaleidox.vban;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -38,6 +39,10 @@ public class VBAN<D> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    public VBAN<D> sendData(D data) throws IOException {
+        VBANPacket packet = packetFactory.create();
+        byte[] bytes = packet.setData(createByteArray(data)).getBytes();
+        socket.send(new DatagramPacket(bytes, bytes.length, address, port));
         return this;
     }
 
