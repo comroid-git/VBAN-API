@@ -9,10 +9,10 @@ import de.kaleidox.vban.VBAN.SampleRate;
 
 import org.intellij.lang.annotations.MagicConstant;
 
-import static de.kaleidox.util.Util.appendByteArray;
-import static de.kaleidox.util.Util.intToByteArray;
-import static de.kaleidox.util.Util.minSizeArray;
-import static de.kaleidox.util.Util.stringToBytesASCII;
+import static de.kaleidox.vban.Util.appendByteArray;
+import static de.kaleidox.vban.Util.intToByteArray;
+import static de.kaleidox.vban.Util.stringToBytesASCII;
+import static de.kaleidox.vban.Util.trimArray;
 
 public class VBANPacketHead implements ByteArray {
     public final static int SIZE = 28;
@@ -33,14 +33,10 @@ public class VBANPacketHead implements ByteArray {
         bytes = appendByteArray(bytes, (byte) (protocol | sampleRateIndex));
         bytes = appendByteArray(bytes, samples, channel);
         bytes = appendByteArray(bytes, (byte) (format | codec));
-        bytes = appendByteArray(bytes, minSizeArray(stringToBytesASCII(streamName), 16));
+        bytes = appendByteArray(bytes, trimArray(stringToBytesASCII(streamName), 16));
         bytes = appendByteArray(bytes, intToByteArray(frameCounter, 4));
 
         this.bytes = bytes;
-    }
-
-    private byte c(char v) {
-        return (byte) v;
     }
 
     @Override
@@ -48,6 +44,13 @@ public class VBANPacketHead implements ByteArray {
         return bytes;
     }
 
+    /**
+     * Creates a Factory with the default settings for audio streams.
+     *
+     * @param channel The number of channels to be supported by the stream.
+     * @return A new Factory instance.
+     * @throws UnsupportedOperationException Always, because Audio communication is not implemented yet.
+     */
     public static Factory defaultAudioProtocolFactory(int channel) throws UnsupportedOperationException {
         //noinspection ConstantConditions TODO Implement Serial Communication
         if (true) throw new UnsupportedOperationException();
@@ -58,6 +61,11 @@ public class VBANPacketHead implements ByteArray {
                 .build();
     }
 
+    /**
+     * Creates a Factory with the default settings for text streams.
+     *
+     * @return A new Factory instance.
+     */
     public static Factory defaultTextProtocolFactory() {
         return VBANPacketHead.Factory.builder()
                 .setProtocol(Protocol.TEXT)
@@ -68,6 +76,12 @@ public class VBANPacketHead implements ByteArray {
                 .build();
     }
 
+    /**
+     * Creates a Factory with the default settings for serial streams.
+     *
+     * @return A new Factory instance.
+     * @throws UnsupportedOperationException Always, because Serial communication is not implemented yet.
+     */
     public static Factory defaultSerialProtocolFactory() throws UnsupportedOperationException {
         //noinspection ConstantConditions TODO Implement Serial Communication
         if (true) throw new UnsupportedOperationException();
@@ -79,6 +93,12 @@ public class VBANPacketHead implements ByteArray {
                 .build();
     }
 
+    /**
+     * Creates a Factory with the default settings for service streams.
+     *
+     * @return A new Factory instance.
+     * @throws UnsupportedOperationException Always, because Service communication is not implemented yet.
+     */
     public static Factory defaultServiceProtocolFactory() throws UnsupportedOperationException {
         //noinspection ConstantConditions TODO Implement Service Communication
         if (true) throw new UnsupportedOperationException();

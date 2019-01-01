@@ -2,17 +2,32 @@ package de.kaleidox.vban.packet;
 
 import de.kaleidox.util.model.ByteArray;
 
-import static de.kaleidox.util.Util.appendByteArray;
+import static de.kaleidox.vban.Util.appendByteArray;
 
+/**
+ * Structural object representation of a VBAN UDP Packet.
+ */
 public class VBANPacket implements ByteArray {
     public static final int MAX_SIZE = 1436;
     private VBANPacketHead head;
     private byte[] bytes;
 
+    /**
+     * Private constructor.
+     *
+     * @param head The PacketHead to attach to this packet.
+     */
     private VBANPacket(VBANPacketHead head) {
         this.head = head;
     }
 
+    /**
+     * Sets the data of this packet to the given byte-array.
+     *
+     * @param data The data to set.
+     * @return This instance.
+     * @throws IllegalArgumentException If the given byte-array is too large.
+     */
     public VBANPacket setData(byte[] data) throws IllegalArgumentException {
         if (data.length > MAX_SIZE)
             throw new IllegalArgumentException("Data is too large to be sent! Must be smaller than " + MAX_SIZE);

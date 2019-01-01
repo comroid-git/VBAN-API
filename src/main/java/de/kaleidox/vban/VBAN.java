@@ -14,8 +14,8 @@ import de.kaleidox.vban.packet.VBANPacketHead;
 
 import org.jetbrains.annotations.NotNull;
 
-import static de.kaleidox.util.Util.appendByteArray;
-import static de.kaleidox.util.Util.createByteArray;
+import static de.kaleidox.vban.Util.appendByteArray;
+import static de.kaleidox.vban.Util.createByteArray;
 import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE;
 
 /**
@@ -52,12 +52,13 @@ public class VBAN<D> extends OutputStream {
      * Tries to send the given data to the specified {@linkplain InetAddress address} on the specified {@code port}.
      *
      * @param data The data to send. Is converted to a bytearray using
-     *             {@link de.kaleidox.util.Util#createByteArray(Object)}.
+     *             {@link Util#createByteArray(Object)}.
      * @return The instance of the stream.
-     * @throws IOException If the stream has been {@linkplain #close() closed} before.
-     * @throws IOException See {@link DatagramSocket#send(DatagramPacket)} for details.
+     * @throws IOException              If the stream has been {@linkplain #close() closed} before.
+     * @throws IOException              See {@link DatagramSocket#send(DatagramPacket)} for details.
+     * @throws IllegalArgumentException If the converted byte-array from the given data is too large.
      */
-    public VBAN<D> sendData(D data) throws IOException {
+    public VBAN<D> sendData(D data) throws IOException, IllegalArgumentException {
         VBANPacket packet = packetFactory.create();
         write(packet.setData(createByteArray(data)).getBytes());
         return this;
