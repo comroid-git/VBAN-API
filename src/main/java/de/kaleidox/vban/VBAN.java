@@ -28,14 +28,6 @@ public class VBAN<D> {
         socket = new DatagramSocket();
     }
 
-    public VBAN<D> sendData(D data) {
-        try {
-            VBANPacket packet = packetFactory.create();
-            byte[] bytes = packet.setData(createByteArray(data)).getBytes();
-            socket.send(new DatagramPacket(bytes, bytes.length, address, port));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     public VBAN<D> sendData(D data) throws IOException {
         VBANPacket packet = packetFactory.create();
         byte[] bytes = packet.setData(createByteArray(data)).getBytes();
