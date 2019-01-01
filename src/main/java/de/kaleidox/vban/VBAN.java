@@ -59,7 +59,7 @@ public class VBAN<D> extends OutputStream {
      * @throws IllegalArgumentException If the converted byte-array from the given data is too large.
      */
     public VBAN<D> sendData(D data) throws IOException, IllegalArgumentException {
-        write(createByteArray(data));
+        writeFlush(createByteArray(data));
         return this;
     }
 
