@@ -40,7 +40,7 @@ public class VBAN<D> extends OutputStream {
      * @param port          The port to send to.
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
-    public VBAN(Factory<VBANPacket> packetFactory, InetAddress address, int port) throws SocketException {
+    private VBAN(Factory<VBANPacket> packetFactory, InetAddress address, int port) throws SocketException {
         this.packetFactory = packetFactory;
         this.address = address;
         this.port = port;
