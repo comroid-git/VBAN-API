@@ -1,24 +1,29 @@
 package de.kaleidox.vban;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
-import static de.kaleidox.util.Util.createByteArray;
+import org.jetbrains.annotations.NotNull;
 
-public class VBAN<D> {
+import static de.kaleidox.util.Util.appendByteArray;
+import static de.kaleidox.util.Util.createByteArray;
+import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE;
+
+public class VBAN<D> extends OutputStream {
     public static final int DEFAULT_PORT = 6980;
     private final InetAddress address;
     private final int port;
-    private final VBANPacket.Factory packetFactory;
-    private final DatagramSocket socket;
+    private VBANPacket.Factory packetFactory;
+    private DatagramSocket socket;
+    private byte[] buf = new byte[0];
+    private boolean closed = false;
 
     private VBAN(VBANPacket.Factory packetFactory, InetAddress address, int port) throws SocketException {
         this.packetFactory = packetFactory;
@@ -30,13 +35,48 @@ public class VBAN<D> {
 
     public VBAN<D> sendData(D data) throws IOException {
         VBANPacket packet = packetFactory.create();
-        byte[] bytes = packet.setData(createByteArray(data)).getBytes();
-        socket.send(new DatagramPacket(bytes, bytes.length, address, port));
+        write(packet.setData(createByteArray(data)).getBytes());
         return this;
     }
 
-    public static VBAN<String> openTextStream(InetAddress address, int port)
-            throws SocketException {
+    @Override
+    public void write(int b) throws IOException {
+        if (buf.length + 1 > MAX_SIZE)
+            throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
+        buf = appendByteArray(buf, (byte) b);
+    }
+
+    @Override
+    public void write(@NotNull byte[] b) throws IOException {
+        super.write(b);
+        flush();
+    }
+
+    @Override
+    public void write(@NotNull byte[] b, int off, int len) throws IOException {
+        super.write(b, off, len);
+        flush();
+    }
+
+    @Override
+    public synchronized void flush() throws IOException {
+        if (closed) throw new IOException("Stream is closed");
+        if (buf.length > MAX_SIZE)
+            throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
+        socket.send(new DatagramPacket(buf, buf.length, address, port));
+        buf = new byte[0];
+    }
+
+    @Override
+    public void close() throws IOException {
+        socket = null;
+        packetFactory = null;
+        super.close();
+
+        closed = true;
+    }
+
+    public static VBAN<String> openTextStream(InetAddress address, int port) throws SocketException {
         return new VBAN<>(
                 VBANPacket.Factory.builder()
                         .setHeadFactory(VBANPacketHead.defaultTextProtocolFactory())
