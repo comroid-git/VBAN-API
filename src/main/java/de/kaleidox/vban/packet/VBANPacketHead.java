@@ -10,6 +10,7 @@ import de.kaleidox.vban.VBAN.SampleRate;
 import org.intellij.lang.annotations.MagicConstant;
 
 import static de.kaleidox.vban.Util.appendByteArray;
+import static de.kaleidox.vban.Util.checkRange;
 import static de.kaleidox.vban.Util.intToByteArray;
 import static de.kaleidox.vban.Util.stringToBytesASCII;
 import static de.kaleidox.vban.Util.trimArray;
@@ -21,17 +22,19 @@ public class VBANPacketHead implements ByteArray {
 
     private VBANPacketHead(@MagicConstant(flagsFromClass = Protocol.class) int protocol,
                            @MagicConstant(flagsFromClass = SampleRate.class) int sampleRateIndex,
-                           byte samples,
-                           byte channel,
+                           int samples,
+                           int channel,
                            @MagicConstant(flagsFromClass = Format.class) int format,
                            @MagicConstant(flagsFromClass = Codec.class) int codec,
                            String streamName,
                            int frameCounter) {
         byte[] bytes = new byte[0];
+        checkRange(samples, 0, 255);
+        checkRange(channel, 0, 255);
 
         bytes = appendByteArray(bytes, "VBAN".getBytes());
         bytes = appendByteArray(bytes, (byte) (protocol | sampleRateIndex));
-        bytes = appendByteArray(bytes, samples, channel);
+        bytes = appendByteArray(bytes, (byte) samples, (byte) channel);
         bytes = appendByteArray(bytes, (byte) (format | codec));
         bytes = appendByteArray(bytes, trimArray(stringToBytesASCII(streamName), 16));
         bytes = appendByteArray(bytes, intToByteArray(frameCounter, 4));
@@ -114,8 +117,8 @@ public class VBANPacketHead implements ByteArray {
         private final int protocol;
         @MagicConstant(valuesFromClass = SampleRate.class)
         private final int sampleRate;
-        private final byte samples;
-        private final byte channel;
+        private final int samples;
+        private final int channel;
         @MagicConstant(valuesFromClass = Format.class)
         private final int format;
         @MagicConstant(valuesFromClass = Codec.class)
@@ -123,7 +126,7 @@ public class VBANPacketHead implements ByteArray {
         private final String streamName;
         private int counter = 1;
 
-        private Factory(int protocol, int sampleRate, byte samples, byte channel, int format, int codec, String streamName) {
+        private Factory(int protocol, int sampleRate, int samples, int channel, int format, int codec, String streamName) {
             this.protocol = protocol;
             this.sampleRate = sampleRate;
             this.samples = samples;
@@ -152,8 +155,8 @@ public class VBANPacketHead implements ByteArray {
             private int protocol = -1;
             @MagicConstant(valuesFromClass = SampleRate.class)
             private int sampleRate = SampleRate.hz48000;
-            private byte samples = -1;
-            private byte channel = 2;
+            private int samples = 255;
+            private int channel = 2;
             @MagicConstant(valuesFromClass = Format.class)
             private int format = Format.INT16;
             @MagicConstant(valuesFromClass = Codec.class)
@@ -181,7 +184,7 @@ public class VBANPacketHead implements ByteArray {
                 return this;
             }
 
-            public byte getSamples() {
+            public int getSamples() {
                 return samples;
             }
 
@@ -190,7 +193,7 @@ public class VBANPacketHead implements ByteArray {
                 return this;
             }
 
-            public byte getChannel() {
+            public int getChannel() {
                 return channel;
             }
 

@@ -79,4 +79,18 @@ public class Util {
         else if (data instanceof ByteArray) return ((ByteArray) data).getBytes();
         else throw new IllegalArgumentException("Unknown Data Type! Please contact the developer.");
     }
+
+    /**
+     * Checks whether the given integer is within the given boundaries,
+     * and if not, throws an {@link IllegalArgumentException}.
+     *
+     * @param check The int to check range of.
+     * @param from The minimum value.
+     * @param to The maximum value.
+     * @throws IllegalArgumentException If the integer is out of bounds.
+     */
+    public static void checkRange(int check, int from, int to) throws IllegalArgumentException {
+        if (check < from || check > to)
+            throw new IllegalArgumentException(String.format("Integer out of range. [%d;%d;%d]", from, check, to));
+    }
 }
