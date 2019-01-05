@@ -1,4 +1,4 @@
-package de.kaleidox.util.model;
+package de.kaleidox.vban.model;
 
 /**
  * A Factory creates more instances of {@code T} with an internal counter

@@ -1,4 +1,4 @@
-package de.kaleidox.util.model;
+package de.kaleidox.vban.model;
 
 /**
  * A Builder is used to create one instance of {@code T} with different parameters.
