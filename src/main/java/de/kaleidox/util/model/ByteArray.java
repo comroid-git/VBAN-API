@@ -1,4 +1,4 @@
-package de.kaleidox.vban.model;
+package de.kaleidox.util.model;
 
 /**
  * Marks an object as a carrier for an array of bytes.
