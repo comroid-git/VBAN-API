@@ -5,14 +5,21 @@ import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinWorkerThread;
 
 import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.util.model.Factory;
+import de.kaleidox.vban.model.AudioRecievedHandler;
 import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
+import de.kaleidox.vban.stream.VBANAudioStream;
 
 import org.jetbrains.annotations.NotNull;
+import sun.audio.AudioData;
 
 import static de.kaleidox.vban.Util.appendByteArray;
 import static de.kaleidox.vban.Util.createByteArray;
@@ -27,10 +34,13 @@ public class VBAN<D> extends OutputStream {
     public static final int DEFAULT_PORT = 6980;
     private final InetAddress address;
     private final int port;
+    private final boolean recieve;
     private Factory<VBANPacket> packetFactory;
     private DatagramSocket socket;
     private byte[] buf = new byte[0];
     private boolean closed = false;
+    private ExecutorService executor;
+    private VBANAudioStream audioStream;
 
     /**
      * Private constructor. Use {@link #openByteStream(Factory, InetAddress, int)} for creating raw instances.
@@ -41,11 +51,56 @@ public class VBAN<D> extends OutputStream {
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
     private VBAN(Factory<VBANPacket> packetFactory, InetAddress address, int port) throws SocketException {
+        this(packetFactory, address, port, false);
+    }
+
+    /**
+     * Private constructor. Use {@link #openByteStream(Factory, InetAddress, int)} for creating raw instances.
+     *
+     * @param packetFactory A factory that creates new instances of VBANPacket. See {@link VBANPacket.Factory.Builder}
+     * @param address       The InetAddress to send to.
+     * @param port          The port to send to.
+     * @param recieve       Whether the stream should be able to recieve data on the given address.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
+    private VBAN(Factory<VBANPacket> packetFactory, InetAddress address, int port, boolean recieve)
+            throws SocketException {
         this.packetFactory = packetFactory;
         this.address = address;
         this.port = port;
+        this.recieve = recieve;
 
-        socket = new DatagramSocket();
+        socket = recieve ? new DatagramSocket(new InetSocketAddress(address, port)) : new DatagramSocket();
+        executor = new ForkJoinPool(Runtime.getRuntime().availableProcessors(),
+                new ForkJoinPool.ForkJoinWorkerThreadFactory() {
+                    @Override
+                    public ForkJoinWorkerThread newThread(ForkJoinPool pool) {
+                        ForkJoinWorkerThread thread = new ForkJoinWorkerThread(pool) {
+                        };
+                        thread.setDaemon(false);
+                        return thread;
+                    }
+                }, new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                System.out.printf("Uncaught exception in Thread: %s", t.getName());
+                e.printStackTrace();
+            }
+        }, true);
+        RecieverThread recieverThread = new RecieverThread();
+        executor.execute(recieverThread);
+        audioStream = recieverThread.stream;
+    }
+
+    public VBANAudioStream getAudioStream() {
+        if (!recieve) throw new IllegalStateException("Stream is not recieving!");
+        return audioStream;
+    }
+
+    public VBAN<D> addAudioRecievedHandler(AudioRecievedHandler audioRecievedHandler) {
+        if (!recieve) throw new IllegalStateException("Stream is not recieving!");
+        audioStream.addAudioRecievedHandler(audioRecievedHandler);
+        return this;
     }
 
     /**
@@ -163,6 +218,47 @@ public class VBAN<D> extends OutputStream {
                         .build(),
                 address, port
         );
+    }
+
+    private class RecieverThread implements Runnable {
+        private final AudioStreamImpl stream;
+        private boolean disabled;
+
+        private RecieverThread() {
+            stream = new AudioStreamImpl();
+            disabled = false;
+        }
+
+        @Override
+        public void run() {
+            while (!disabled) {
+                try {
+                    assert socket.isBound() : disableUnboundSocket();
+                    byte[] bytes = new byte[MAX_SIZE];
+                    DatagramPacket packet = new DatagramPacket(bytes, MAX_SIZE);
+                    socket.receive(packet);
+                    stream.feed(packet.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        private String disableUnboundSocket() {
+            disabled = true;
+            return "Socket is not bound";
+        }
+
+        private class AudioStreamImpl extends VBANAudioStream {
+            protected AudioStreamImpl() {
+                super(executor);
+            }
+
+            @Override
+            protected AudioData feed(byte[] bytes) {
+                return super.feed(bytes);
+            }
+        }
     }
 
     /**
