@@ -24,7 +24,7 @@ public abstract class VBANAudioStream {
         executor.execute(new DataDistributionThread());
     }
 
-    protected synchronized AudioData feed(byte[] bytes) {
+    protected AudioData feed(byte[] bytes) {
         synchronized (dataQueue) {
             AudioData audioData = new AudioData(bytes);
             dataQueue.add(audioData);
