@@ -255,7 +255,7 @@ public class VBAN<D> extends OutputStream {
             }
 
             @Override
-            protected AudioData feed(byte[] bytes) {
+            protected AudioData feed(@NotNull byte[] bytes) {
                 return super.feed(bytes);
             }
         }
