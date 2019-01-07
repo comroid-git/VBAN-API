@@ -8,6 +8,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import de.kaleidox.vban.model.AudioRecievedHandler;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sun.audio.AudioData;
 
 public abstract class VBANAudioStream {
@@ -15,7 +17,7 @@ public abstract class VBANAudioStream {
     private final ExecutorService executor;
     private List<AudioRecievedHandler> handlers;
 
-    protected VBANAudioStream(ExecutorService executor) {
+    protected VBANAudioStream(@NotNull ExecutorService executor) {
         this.executor = executor;
 
         handlers = new ArrayList<>();
@@ -24,7 +26,7 @@ public abstract class VBANAudioStream {
         executor.execute(new DataDistributionThread());
     }
 
-    protected AudioData feed(byte[] bytes) {
+    protected AudioData feed(@NotNull byte[] bytes) {
         synchronized (dataQueue) {
             AudioData audioData = new AudioData(bytes);
             dataQueue.add(audioData);
@@ -33,8 +35,9 @@ public abstract class VBANAudioStream {
         }
     }
 
-    public VBANAudioStream addAudioRecievedHandler(AudioRecievedHandler audioRecievedHandler) {
-        handlers.add(audioRecievedHandler);
+    public VBANAudioStream addAudioRecievedHandler(@Nullable AudioRecievedHandler audioRecievedHandler) {
+        if (audioRecievedHandler != null)
+            handlers.add(audioRecievedHandler);
         return this;
     }
 
