@@ -13,7 +13,7 @@ public class ConnectionTest {
         try (VBAN<String> vban = VBAN.openTextStream(getLocalHost(), DEFAULT_PORT)) {
             int i = 0;
             while (i++ < 10) {
-                vban.writeFlush("bus(0).mute=1".getBytes(StandardCharsets.UTF_8));
+                vban.write("bus(0).mute=1\n".getBytes(StandardCharsets.UTF_8));
                 Thread.sleep(500);
                 vban.sendData("bus(0).mute=0");
                 Thread.sleep(500);
