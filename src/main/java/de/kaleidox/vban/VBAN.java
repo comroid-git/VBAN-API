@@ -66,6 +66,8 @@ public class VBAN<D> extends OutputStream {
     /**
      * Writes one byte to this stream's byte buffer, but does not send anything.
      * The byte buffer is being sent and cleared by invoking {@link #flush()}.
+     * If the character-code of {@code \n} is written, the stream is flushed,
+     * to ensure a 1:1 ratio of lines:writes.
      *
      * @param b The byte as an int to append.
      * @throws IOException If the stream has been {@linkplain #close() closed} before.
@@ -76,6 +78,7 @@ public class VBAN<D> extends OutputStream {
         if (buf.length + 1 > MAX_SIZE)
             throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
         buf = appendByteArray(buf, (byte) b);
+        if ((char) b == '\n') flush();
     }
 
     /**
