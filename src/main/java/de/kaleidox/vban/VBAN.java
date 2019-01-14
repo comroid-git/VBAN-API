@@ -28,13 +28,13 @@ import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE;
 /**
  * Facade class for interacting with the API.
  *
- * @param <D> Generic-type for the
+ * @param <T> Generic-type for the
  */
-public class VBAN<D> extends OutputStream {
+public class VBAN<T> extends OutputStream {
     public static final int DEFAULT_PORT = 6980;
     private final InetAddress address;
     private final int port;
-    private Factory<VBANPacket> packetFactory;
+    private Factory<VBANPacket<T>> packetFactory;
     private DatagramSocket socket;
     private byte[] buf = new byte[0];
     private boolean closed = false;
@@ -48,7 +48,7 @@ public class VBAN<D> extends OutputStream {
      *
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
-    private VBAN(Factory<VBANPacket> packetFactory, InetAddress address, int port) throws SocketException {
+    private VBAN(Factory<VBANPacket<T>> packetFactory, InetAddress address, int port) throws SocketException {
         this.packetFactory = packetFactory;
         this.address = address;
         this.port = port;
@@ -67,7 +67,7 @@ public class VBAN<D> extends OutputStream {
      * @throws IOException              See {@link DatagramSocket#send(DatagramPacket)} for details.
      * @throws IllegalArgumentException If the converted byte-array from the given data is too large.
      */
-    public VBAN<D> sendData(D data) throws IOException, IllegalArgumentException {
+    public VBAN<T> sendData(T data) throws IOException, IllegalArgumentException {
         writeFlush(createByteArray(data));
         return this;
     }
@@ -159,7 +159,7 @@ public class VBAN<D> extends OutputStream {
      * @return A new VBAN stream that can accept a {@link ByteArray} with {@link #sendData(Object)}.
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
-    public static VBAN<ByteArray> openByteStream(Factory<VBANPacket> packetFactory, InetAddress address, int port)
+    public static VBAN<ByteArray> openByteStream(Factory<VBANPacket<ByteArray>> packetFactory, InetAddress address, int port)
             throws SocketException {
         return new VBAN<>(packetFactory, address, port);
     }
