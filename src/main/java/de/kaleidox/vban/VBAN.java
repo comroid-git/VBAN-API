@@ -6,9 +6,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
+import de.kaleidox.util.model.Bindable;
 import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.util.model.Factory;
+import de.kaleidox.util.model.IntEnum;
+import de.kaleidox.vban.model.AudioPacket;
+import de.kaleidox.vban.model.FormatValue;
+import de.kaleidox.vban.model.SRValue;
 import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
@@ -16,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static de.kaleidox.vban.Util.appendByteArray;
 import static de.kaleidox.vban.Util.createByteArray;
+import static de.kaleidox.vban.packet.VBANPacket.Factory.builder;
 import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE;
 
 /**
@@ -38,6 +45,7 @@ public class VBAN<D> extends OutputStream {
      * @param packetFactory A factory that creates new instances of VBANPacket. See {@link VBANPacket.Factory.Builder}
      * @param address       The InetAddress to send to.
      * @param port          The port to send to.
+     *
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
     private VBAN(Factory<VBANPacket> packetFactory, InetAddress address, int port) throws SocketException {
@@ -53,6 +61,7 @@ public class VBAN<D> extends OutputStream {
      *
      * @param data The data to send. Is converted to a bytearray using
      *             {@link Util#createByteArray(Object)}.
+     *
      * @return The instance of the stream.
      * @throws IOException              If the stream has been {@linkplain #close() closed} before.
      * @throws IOException              See {@link DatagramSocket#send(DatagramPacket)} for details.
@@ -70,6 +79,7 @@ public class VBAN<D> extends OutputStream {
      * to ensure a 1:1 ratio of lines:writes.
      *
      * @param b The byte as an int to append.
+     *
      * @throws IOException If the stream has been {@linkplain #close() closed} before.
      * @throws IOException See {@link DatagramSocket#send(DatagramPacket)} for details.
      */
@@ -114,6 +124,7 @@ public class VBAN<D> extends OutputStream {
      * Writes an array of bytes to this stream's byte buffer, then tries to {@linkplain #flush() send} the byte buffer.
      *
      * @param b The bytes to send.
+     *
      * @throws IOException If the stream has been {@linkplain #close() closed} before.
      * @throws IOException See {@link DatagramSocket#send(DatagramPacket)} for details.
      */
@@ -129,6 +140,7 @@ public class VBAN<D> extends OutputStream {
      * @param b   The byte array to create a subset from.
      * @param off The offset for the subset in the array.
      * @param len The length of the subset to be sent in the array.
+     *
      * @throws IOException If the stream has been {@linkplain #close() closed} before.
      * @throws IOException See {@link DatagramSocket#send(DatagramPacket)} for details.
      */
@@ -143,6 +155,7 @@ public class VBAN<D> extends OutputStream {
      * @param packetFactory A factory that creates new, empty {@linkplain VBANPacket VBANPackets}.
      * @param address       The {@link InetAddress} to send this stream's data to.
      * @param port          The {@code port} to send data to.
+     *
      * @return A new VBAN stream that can accept a {@link ByteArray} with {@link #sendData(Object)}.
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
@@ -152,73 +165,138 @@ public class VBAN<D> extends OutputStream {
     }
 
     /**
+     * Opens a VBAN Remote Text stream to the specified port on {@code localhost}.
+     *
+     * @param port The {@code port} to send data to.
+     *
+     * @return A new VBAN stream that can accept a {@link String} with {@link #sendData(Object)}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
+    public static VBAN<String> openTextStream(int port) throws SocketException, UnknownHostException {
+        return openTextStream(InetAddress.getLocalHost(), port);
+    }
+
+    /**
      * Opens a VBAN Remote Text stream to the specifications.
      *
      * @param address The {@link InetAddress} to send this stream's data to.
      * @param port    The {@code port} to send data to.
+     *
      * @return A new VBAN stream that can accept a {@link String} with {@link #sendData(Object)}.
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
     public static VBAN<String> openTextStream(InetAddress address, int port) throws SocketException {
-        return new VBAN<>(
-                VBANPacket.Factory.builder()
-                        .setHeadFactory(VBANPacketHead.defaultTextProtocolFactory())
-                        .build(),
-                address, port
-        );
+        return new VBAN<>(builder(Protocol.TEXT).build(), address, port);
     }
 
     /**
      * Collection of sample rate indices, required for creating a {@link VBANPacketHead.Factory}.
      */
-    public final class SampleRate {
-        public final static int hz6000 = 0;
-        public final static int hz12000 = 1;
-        public final static int hz24000 = 2;
-        public final static int hz48000 = 3;
-        public final static int hz96000 = 4;
-        public final static int hz192000 = 5;
-        public final static int hz384000 = 6;
+    public enum SampleRate implements SRValue<AudioPacket> {
+        Hz6000,
+        Hz12000,
+        Hz24000,
+        Hz48000,
+        Hz96000,
+        Hz192000,
+        Hz384000,
 
-        public final static int hz8000 = 7;
-        public final static int hz16000 = 8;
-        public final static int hz32000 = 9;
-        public final static int hz64000 = 10;
-        public final static int hz128000 = 11;
-        public final static int hz256000 = 12;
-        public final static int hz512000 = 13;
+        Hz8000,
+        Hz16000,
+        Hz32000,
+        Hz64000,
+        Hz128000,
+        Hz256000,
+        Hz512000,
 
-        public final static int hz11025 = 14;
-        public final static int hz22050 = 15;
-        public final static int hz44100 = 16;
-        public final static int hz88200 = 17;
-        public final static int hz176400 = 18;
-        public final static int hz352800 = 19;
-        public final static int hz705600 = 20;
+        Hz11025,
+        Hz22050,
+        Hz44100,
+        Hz88200,
+        Hz176400,
+        Hz352800,
+        Hz705600;
+
+        @Override
+        public int getValue() {
+            return ordinal();
+        }
     }
 
-    /**
-     * Collection of protocol values, required for creating a {@link VBANPacketHead.Factory}.
-     */
-    public final class Protocol {
-        public final static int AUDIO = 0x00;
-        public final static int SERIAL = 0x20;
-        public final static int TEXT = 0x40;
-        public final static int SERVICE = 0x60;
+    public enum BitsPerSecond implements SRValue<String> {
+        Bps0,
+        Bps110,
+        Bps150,
+        Bps300,
+        Bps600,
+        Bps1200,
+        Bps2400,
+
+        Bps4800,
+        Bps9600,
+        Bps14400,
+        Bps19200,
+        Bps31250,
+        Bps38400,
+        Bps57600,
+
+        Bps115200,
+        Bps128000,
+        Bps230400,
+        Bps250000,
+        Bps256000,
+        Bps460800,
+        Bps921600,
+
+        Bps1000000,
+        Bps1500000,
+        Bps2000000,
+        Bps3000000;
+
+        @Override
+        public int getValue() {
+            return ordinal();
+        }
     }
 
     /**
      * Collection of format values, required for creating a {@link VBANPacketHead.Factory}.
      */
-    public final class Format {
-        public final static int BYTE8 = 0x00;
-        public final static int INT16 = 0x01;
-        public final static int INT24 = 0x02;
-        public final static int INT32 = 0x03;
-        public final static int FLOAT32 = 0x04;
-        public final static int FLOAT64 = 0x05;
-        public final static int BITS12 = 0x06;
-        public final static int BITS10 = 0x07;
+    public enum AudioFormat implements FormatValue<AudioPacket> {
+        BYTE8(0x00),
+        INT16(0x01),
+        INT24(0x02),
+        INT32(0x03),
+        FLOAT32(0x04),
+        FLOAT64(0x05),
+        BITS12(0x06),
+        BITS10(0x07);
+
+        private final int value;
+
+        AudioFormat(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public enum Format implements FormatValue<String> {
+        BYTE8(0x00);
+
+        private final int value;
+
+        Format(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
     }
 
     /**
@@ -229,5 +307,45 @@ public class VBAN<D> extends OutputStream {
         public final static int VBCA = 0x10; // VB-Audio AOIP Codec
         public final static int VBCV = 0x20; // VB-Audio VOIP Codec
         public final static int USER = 0xF0;
+    }
+
+    /**
+     * Collection of protocol values, required for creating a {@link VBANPacketHead.Factory}.
+     */
+    public static final class Protocol<T> implements Bindable<T>, IntEnum {
+        public final static Protocol<AudioPacket> AUDIO = new Protocol<>(0x00);
+        public final static Protocol<CharSequence> SERIAL = new Protocol<>(0x20);
+        public final static Protocol<String> TEXT = new Protocol<>(0x40);
+        public final static Protocol<ByteArray> SERVICE = new Protocol<>(0x60);
+
+        private final int value;
+
+        private Protocol(int value) {
+            this.value = value;
+        }
+
+        public String name() {
+            switch (value) {
+                case 0x00:
+                    return "AUDIO";
+                case 0x20:
+                    return "SERIAL";
+                case 0x40:
+                    return "TEXT";
+                case 0x60:
+                    return "SERVICE";
+            }
+            throw new AssertionError("Unknown protocol: " + this.toString());
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s-Protocol(%s)", name(), Integer.toHexString(value));
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
     }
 }
