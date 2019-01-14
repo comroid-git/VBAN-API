@@ -171,6 +171,7 @@ public class VBAN<D> extends OutputStream {
      *
      * @return A new VBAN stream that can accept a {@link String} with {@link #sendData(Object)}.
      * @throws SocketException See {@link DatagramSocket} constructor.
+     * @throws UnknownHostException See {@link InetAddress#getLocalHost()}.
      */
     public static VBAN<String> openTextStream(int port) throws SocketException, UnknownHostException {
         return openTextStream(InetAddress.getLocalHost(), port);

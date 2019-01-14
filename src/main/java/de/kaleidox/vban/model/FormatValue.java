@@ -4,7 +4,7 @@ import de.kaleidox.util.model.Bindable;
 import de.kaleidox.util.model.IntEnum;
 
 /**
- * Bindable & IntEnum interface for the value that belongs into the format-bit of a packetheader.
+ * Bindable and IntEnum interface for the value that belongs into the format-bit of a packetheader.
  *
  * @param <T> See {@link Bindable} interface.
  *
