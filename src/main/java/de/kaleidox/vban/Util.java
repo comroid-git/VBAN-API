@@ -15,6 +15,7 @@ public class Util {
      * Creates an ASCII conform byte-array from the given String.
      *
      * @param str The string to convert.
+     *
      * @return A byte-array that contains the ASCII mappings of the given String.
      */
     public static byte[] stringToBytesASCII(String str) {
@@ -32,6 +33,7 @@ public class Util {
      *
      * @param ba1 The first, base byte-array.
      * @param ba2 The bytes to be appended.
+     *
      * @return The new, larger byte-array.
      */
     public static byte[] appendByteArray(byte[] ba1, byte... ba2) {
@@ -48,6 +50,7 @@ public class Util {
      *
      * @param base The base array.
      * @param size The desired size.
+     *
      * @return The new, resized array.
      */
     public static byte[] trimArray(byte[] base, int size) {
@@ -61,6 +64,7 @@ public class Util {
      *
      * @param integer The integer to convert.
      * @param size    The desired size of the array.
+     *
      * @return The new byte-array.
      */
     public static byte[] intToByteArray(int integer, int size) {
@@ -71,6 +75,7 @@ public class Util {
      * Converts an object into a byte-array. Used by {@link VBAN#sendData(Object)}.
      *
      * @param data The object to convert.
+     *
      * @return The byte-array that has been converted out.
      */
     public static byte[] createByteArray(Object data) {
@@ -87,6 +92,7 @@ public class Util {
      * @param check The int to check range of.
      * @param from  The minimum value.
      * @param to    The maximum value.
+     *
      * @throws IllegalArgumentException If the integer is out of bounds.
      */
     public static void checkRange(int check, int from, int to) throws IllegalArgumentException {
