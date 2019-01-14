@@ -1,5 +1,6 @@
 package de.kaleidox.test.vban.packet;
 
+import de.kaleidox.vban.VBAN;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
 import org.junit.Before;
@@ -12,7 +13,7 @@ public class PacketHeaderTest {
 
     @Before
     public void setUp() {
-        headFactory = VBANPacketHead.defaultTextProtocolFactory();
+        headFactory = VBANPacketHead.defaultFactory(VBAN.Protocol.TEXT);
     }
 
     @Test
