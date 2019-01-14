@@ -12,9 +12,6 @@ task wrapper(type: Wrapper) {
 }
 
 javadoc {
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html4', true)
-    }
     source = sourceSets.main.allJava
     options.encoding = 'UTF-8'
     options.destinationDirectory(new File("./docs/"))
