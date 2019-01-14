@@ -42,7 +42,7 @@ public class VBANPacket<T> implements ByteArray {
         return appendByteArray(head.getBytes(), bytes);
     }
 
-    public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacket> {
+    public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacket<T>> {
         private final VBANPacketHead.Factory<T> headFactory;
 
         private Factory(VBANPacketHead.Factory<T> headFactory) {
@@ -63,7 +63,7 @@ public class VBANPacket<T> implements ByteArray {
             return new Builder<>(protocol);
         }
 
-        public static class Builder<T> implements de.kaleidox.util.model.Builder<Factory> {
+        public static class Builder<T> implements de.kaleidox.util.model.Builder<Factory<T>> {
             private final Protocol<T> protocol;
             private VBANPacketHead.Factory<T> headFactory;
 

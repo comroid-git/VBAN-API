@@ -111,7 +111,7 @@ public class VBANPacketHead<T> implements ByteArray {
         return builder(Protocol.SERVICE).build();
     }
 
-    public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacketHead> {
+    public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacketHead<T>> {
         private final int protocol;
         private final int sampleRate;
         private final int samples;
