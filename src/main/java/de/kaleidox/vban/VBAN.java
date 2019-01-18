@@ -68,7 +68,8 @@ public class VBAN<T> extends OutputStream {
      * @throws IllegalArgumentException If the converted byte-array from the given data is too large.
      */
     public VBAN<T> sendData(T data) throws IOException, IllegalArgumentException {
-        writeFlush(createByteArray(data));
+        write(createByteArray(data));
+        flush();
         return this;
     }
 
@@ -114,6 +115,11 @@ public class VBAN<T> extends OutputStream {
      */
     @Override
     public void close() {
+        try {
+            flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         socket = null;
         packetFactory = null;
 
@@ -127,7 +133,9 @@ public class VBAN<T> extends OutputStream {
      *
      * @throws IOException If the stream has been {@linkplain #close() closed} before.
      * @throws IOException See {@link DatagramSocket#send(DatagramPacket)} for details.
+     * @deprecated Use {@link #sendData(Object)} instead.
      */
+    @Deprecated
     public void writeFlush(@NotNull byte[] b) throws IOException {
         super.write(b);
         flush();
@@ -143,7 +151,9 @@ public class VBAN<T> extends OutputStream {
      *
      * @throws IOException If the stream has been {@linkplain #close() closed} before.
      * @throws IOException See {@link DatagramSocket#send(DatagramPacket)} for details.
+     * @deprecated Use {@link #sendData(Object)} instead.
      */
+    @Deprecated
     public void writeFlush(@NotNull byte[] b, int off, int len) throws IOException {
         super.write(b, off, len);
         flush();

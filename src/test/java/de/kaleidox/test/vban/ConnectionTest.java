@@ -17,7 +17,7 @@ public class ConnectionTest {
             vban.write("bus(0).mute=1".getBytes(UTF_8));
             vban.flush();
             Thread.sleep(500);
-            vban.writeFlush("bus(0).mute=0".getBytes(UTF_8));
+            vban.sendData("bus(0).mute=0");
             Thread.sleep(500);
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();

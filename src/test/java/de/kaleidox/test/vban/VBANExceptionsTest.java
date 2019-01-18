@@ -17,7 +17,8 @@ public class VBANExceptionsTest {
         byte[] bytes = new byte[VBANPacket.MAX_SIZE];
         Arrays.fill(bytes, (byte) 'x');
         VBAN<String> vban = createTextStream();
-        vban.writeFlush(bytes);
+        vban.write(bytes);
+        vban.flush();
         vban.close();
     }
 
@@ -26,7 +27,8 @@ public class VBANExceptionsTest {
         byte[] bytes = new byte[VBANPacket.MAX_SIZE + 1];
         Arrays.fill(bytes, (byte) 'x');
         VBAN<String> vban = createTextStream();
-        vban.writeFlush(bytes);
+        vban.write(bytes);
+        vban.flush();
         vban.close();
     }
 
