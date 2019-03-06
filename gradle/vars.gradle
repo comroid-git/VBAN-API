@@ -1,7 +1,7 @@
 import static java.lang.System.getenv
 
 ext {
-    artifactName = "vban"
+    artifactName = "vban-api"
     projectName = "VBAN-API"
     projectDescription = "Java 7 compatible Library for communicating with the VB-Audio VBAN interface"
 
