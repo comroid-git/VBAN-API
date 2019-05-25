@@ -31,6 +31,7 @@ publishing {
                 name = projectName
                 description = projectDescription
                 inceptionYear = '2019'
+                url = 'https://github.com/burdoto/VBAN-API'
 
                 licenses {
                     license {
@@ -45,6 +46,12 @@ publishing {
                         name = "Tobias Burdow"
                         email = "burdoto@outlook.com"
                     }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/burdoto/VBAN-API.git'
+                    developerConnection = 'scm:git:ssh://github.com/burdoto/VBAN-API.git'
+                    url = 'https://github.com/burdoto/VBAN-API'
                 }
             }
         }
