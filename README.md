@@ -12,6 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'de.kaleidox:vban-api:0.2.1'
+    implementation 'de.kaleidox:vban-api:0.3.2'
 }
 ```
