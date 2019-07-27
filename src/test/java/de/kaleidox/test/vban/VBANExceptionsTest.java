@@ -41,6 +41,6 @@ public class VBANExceptionsTest {
     }
 
     private static VBANOutputStream<String> createTextStream() throws UnknownHostException, SocketException {
-        return VBAN.openTextStream(InetAddress.getLocalHost(), VBAN.DEFAULT_PORT);
+        return VBAN.openTextOutputStream(InetAddress.getLocalHost(), VBAN.DEFAULT_PORT);
     }
 }

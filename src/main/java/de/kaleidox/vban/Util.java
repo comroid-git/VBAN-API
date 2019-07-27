@@ -99,4 +99,12 @@ public class Util {
         if (check < from || check > to)
             throw new IllegalArgumentException(String.format("Integer out of range. [%d;%d;%d]", from, check, to));
     }
+
+    public static byte[] subArray(byte[] src, int iLow, int iHigh) {
+        byte[] bytes = new byte[iHigh - iLow];
+
+        System.arraycopy(src, iLow, bytes, 0, bytes.length);
+
+        return bytes;
+    }
 }

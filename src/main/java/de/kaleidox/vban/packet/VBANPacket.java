@@ -2,16 +2,19 @@ package de.kaleidox.vban.packet;
 
 import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.vban.VBAN.Protocol;
+import de.kaleidox.vban.exception.InvalidPacketAttributeException;
 
 import static de.kaleidox.vban.Util.appendByteArray;
+import static de.kaleidox.vban.Util.subArray;
 
 /**
  * Structural object representation of a VBAN UDP Packet.
  */
 public class VBANPacket<T> implements ByteArray {
     public static final int MAX_SIZE = 1436;
-    private VBANPacketHead<T> head;
-    private byte[] bytes;
+    public static final int SIZE_WITHOUT_HEAD = MAX_SIZE - VBANPacketHead.SIZE;
+    protected VBANPacketHead<T> head;
+    protected byte[] bytes;
 
     /**
      * Private constructor.
@@ -20,6 +23,11 @@ public class VBANPacket<T> implements ByteArray {
      */
     private VBANPacket(VBANPacketHead<T> head) {
         this.head = head;
+    }
+
+    public VBANPacket(VBANPacketHead<T> head, byte[] bytes) {
+        this.head = head;
+        this.bytes = bytes;
     }
 
     /**
@@ -40,6 +48,25 @@ public class VBANPacket<T> implements ByteArray {
     @Override
     public byte[] getBytes() {
         return appendByteArray(head.getBytes(), bytes);
+    }
+
+    public static VBANPacket.Decoded decode(byte[] bytes) throws InvalidPacketAttributeException {
+        return new Decoded(bytes);
+    }
+
+    public static class Decoded extends VBANPacket {
+        public Decoded(byte[] bytes) throws InvalidPacketAttributeException {
+            //noinspection unchecked
+            super(VBANPacketHead.decode(subArray(bytes, 0, VBANPacketHead.SIZE)),
+                    subArray(bytes, VBANPacketHead.SIZE + 1, VBANPacket.MAX_SIZE));
+        }
+
+        public VBANPacketHead.Decoded getHead() {
+            if (head instanceof VBANPacketHead.Decoded)
+                return (VBANPacketHead.Decoded) head;
+
+            throw new AssertionError("Head is not instanceof VBANPacketHead.Decoded");
+        }
     }
 
     public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacket<T>> {

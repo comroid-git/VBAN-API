@@ -1,13 +1,17 @@
 package de.kaleidox.vban.packet;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 import de.kaleidox.util.model.ByteArray;
+import de.kaleidox.vban.VBAN;
 import de.kaleidox.vban.VBAN.AudioFormat;
 import de.kaleidox.vban.VBAN.BitsPerSecond;
 import de.kaleidox.vban.VBAN.Codec;
 import de.kaleidox.vban.VBAN.Format;
 import de.kaleidox.vban.VBAN.Protocol;
 import de.kaleidox.vban.VBAN.SampleRate;
-import de.kaleidox.vban.model.AudioPacket;
+import de.kaleidox.vban.exception.InvalidPacketAttributeException;
 import de.kaleidox.vban.model.DataRateValue;
 import de.kaleidox.vban.model.FormatValue;
 
@@ -24,6 +28,10 @@ public class VBANPacketHead<T> implements ByteArray {
     public final static int SIZE = 28;
 
     private final byte[] bytes;
+
+    private VBANPacketHead(byte[] bytes) {
+        this.bytes = bytes;
+    }
 
     private VBANPacketHead(int protocol,
                            int sampleRateIndex,
@@ -61,6 +69,130 @@ public class VBANPacketHead<T> implements ByteArray {
      */
     public static <T> Factory<T> defaultFactory(Protocol<T> forProtocol) throws UnsupportedOperationException {
         return builder(forProtocol).build();
+    }
+
+    public static VBANPacketHead.Decoded decode(byte[] headBytes) throws InvalidPacketAttributeException {
+        return new VBANPacketHead.Decoded(headBytes);
+    }
+
+    public static class Decoded extends VBANPacketHead {
+        private final Protocol<?> protocol;
+        private final DataRateValue<?> dataRateValue;
+        private final int samples;
+        private final int channel;
+        private final FormatValue<?> format;
+        @MagicConstant(valuesFromClass = VBAN.Codec.class) private final int codec;
+        private final String streamName;
+        private final int frame;
+
+        private Decoded(byte[] bytes) throws InvalidPacketAttributeException {
+            super(bytes);
+
+            if (bytes.length > SIZE)
+                throw new IllegalArgumentException("Bytearray is too large, must be exactly " + SIZE + " bytes long!");
+
+            if (bytes[0] != 'V' || bytes[1] != 'B' || bytes[2] != 'A' || bytes[3] != 'N')
+                throw new InvalidPacketAttributeException("Invalid packet head: First bytes must be 'VBAN'");
+
+            int protocolInt = bytes[4] & 0b111;
+            protocol = VBAN.Protocol.byValue(protocolInt);
+
+            // throw exception if protocol is SERVICE
+            if (protocol.getValue() == 0x60)
+                throw new IllegalStateException("Service Subprotocol is not supported!");
+
+            int dataRateInt = bytes[4] >> 5;
+            switch (protocol.getValue()) {
+                case 0x00: // AUDIO
+                    dataRateValue = SampleRate.byValue(dataRateInt);
+                    break;
+                case 0x20: // SERIAL
+                case 0x40: // TEXT
+                    dataRateValue = BitsPerSecond.byValue(dataRateInt);
+                    break;
+                //noinspection ConstantConditions
+                case 0x60: // SERVICE
+                default:
+                    // to avoid compiler warning, set to null.
+                    // service protocol is not supported
+                    dataRateValue = null;
+                    break;
+            }
+
+            samples = bytes[5];
+
+            channel = bytes[6];
+
+            int formatInt = bytes[7] >> 3;
+            switch (protocol.getValue()) {
+                case 0x00: // AUDIO
+                    format = AudioFormat.byValue(formatInt);
+                    break;
+                case 0x20: // SERIAL
+                case 0x40: // TEXT
+                    format = Format.byValue(formatInt);
+                    break;
+                case 0x60: // SERVICE
+                default:
+                    // to avoid compiler warning, set to null.
+                    // service protocol is not supported
+                    format = null;
+                    break;
+            }
+
+            // reserved bit
+            // int reservedBit = (bytes[7] >> 4) & 0b1;
+
+            int codecInt = bytes[7] & 0xFF;
+            switch (codecInt) {
+                case Codec.PCM:
+                case Codec.VBCA:
+                case Codec.VBCV:
+                case Codec.USER:
+                    //noinspection MagicConstant
+                    codec = codecInt;
+                    break;
+                default:
+                    throw new InvalidPacketAttributeException("Invalid Codec selector: " + Integer.toHexString(codecInt));
+            }
+
+            byte[] nameBytes = new byte[16];
+            System.arraycopy(bytes, 8, nameBytes, 0, 16);
+            streamName = new String(nameBytes, StandardCharsets.US_ASCII);
+
+            byte[] frameBytes = new byte[4];
+            System.arraycopy(bytes, 24, frameBytes, 0, 4);
+            frame = ByteBuffer.wrap(frameBytes).asIntBuffer().get();
+        }
+
+        public Protocol<?> getProtocol() {
+            return protocol;
+        }
+
+        public DataRateValue<?> getDataRateValue() {
+            return dataRateValue;
+        }
+
+        public int getSamples() {
+            return samples;
+        }
+
+        public int getChannel() {
+            return channel;
+        }
+
+        public FormatValue<?> getFormat() {
+            return format;
+        }
+
+        @MagicConstant(valuesFromClass = VBAN.Codec.class)
+        public int getCodec() {
+            return codec;
+        }
+
+        public String getStreamName() {
+            return streamName;
+        }
     }
 
     public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacketHead<T>> {

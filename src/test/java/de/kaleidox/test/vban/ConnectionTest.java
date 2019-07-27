@@ -10,7 +10,7 @@ import static de.kaleidox.vban.VBAN.DEFAULT_PORT;
 
 public class ConnectionTest {
     public static void main(String[] args) {
-        try (VBANOutputStream<String> vban = VBAN.openTextStream(DEFAULT_PORT)) {
+        try (VBANOutputStream<String> vban = VBAN.openTextOutputStream(DEFAULT_PORT)) {
             vban.write("bus(0).mute=1\n".getBytes(UTF_8));
             Thread.sleep(500);
             vban.sendData("bus(0).mute=0");
