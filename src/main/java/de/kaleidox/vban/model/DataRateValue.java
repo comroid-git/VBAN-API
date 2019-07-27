@@ -11,5 +11,5 @@ import de.kaleidox.util.model.IntEnum;
  * @see de.kaleidox.vban.VBAN.SampleRate
  * @see de.kaleidox.vban.VBAN.BitsPerSecond
  */
-public interface SRValue<T> extends IntEnum, Bindable<T> {
+public interface DataRateValue<T> extends IntEnum, Bindable<T> {
 }
