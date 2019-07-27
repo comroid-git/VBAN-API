@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'groovy'
 
 group 'de.kaleidox'
-version '0.3.2'
+version '0.4.0-SNAPSHOT'
 
 apply from: 'gradle/vars.gradle'
 
