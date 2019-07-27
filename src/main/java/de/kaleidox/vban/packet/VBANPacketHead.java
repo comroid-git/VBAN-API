@@ -63,54 +63,6 @@ public class VBANPacketHead<T> implements ByteArray {
         return builder(forProtocol).build();
     }
 
-    /**
-     * Creates a Factory with the default settings for audio streams.
-     *
-     * @param channel The number of channels to be supported by the stream.
-     *
-     * @return A new Factory instance.
-     * @throws UnsupportedOperationException Always, because Audio communication is not implemented yet.
-     * @deprecated Use {@link #defaultFactory(Protocol)} instead.
-     */
-    @Deprecated
-    public static Factory<AudioPacket> defaultAudioProtocolFactory(int channel) throws UnsupportedOperationException {
-        return builder(Protocol.AUDIO).build();
-    }
-
-    /**
-     * Creates a Factory with the default settings for text streams.
-     *
-     * @return A new Factory instance.
-     * @deprecated Use {@link #defaultFactory(Protocol)} instead.
-     */
-    @Deprecated
-    public static Factory<String> defaultTextProtocolFactory() {
-        return builder(Protocol.TEXT).build();
-    }
-
-    /**
-     * Creates a Factory with the default settings for serial streams.
-     *
-     * @return A new Factory instance.
-     * @deprecated Use {@link #defaultFactory(Protocol)} instead.
-     */
-    @Deprecated
-    public static Factory<CharSequence> defaultSerialProtocolFactory() {
-        return builder(Protocol.SERIAL).build();
-    }
-
-    /**
-     * Creates a Factory with the default settings for service streams.
-     *
-     * @return A new Factory instance.
-     * @throws UnsupportedOperationException Always, because Service communication is currently unsupported.
-     * @deprecated Use {@link #defaultFactory(Protocol)} instead.
-     */
-    @Deprecated
-    public static Factory<ByteArray> defaultServiceProtocolFactory() throws UnsupportedOperationException {
-        return builder(Protocol.SERVICE).build();
-    }
-
     public static class Factory<T> implements de.kaleidox.util.model.Factory<VBANPacketHead<T>> {
         private final int protocol;
         private final int sampleRate;
