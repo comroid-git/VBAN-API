@@ -8,8 +8,8 @@ import de.kaleidox.vban.VBAN.Format;
 import de.kaleidox.vban.VBAN.Protocol;
 import de.kaleidox.vban.VBAN.SampleRate;
 import de.kaleidox.vban.model.AudioPacket;
+import de.kaleidox.vban.model.DataRateValue;
 import de.kaleidox.vban.model.FormatValue;
-import de.kaleidox.vban.model.SRValue;
 
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -122,7 +122,7 @@ public class VBANPacketHead<T> implements ByteArray {
         private int counter;
 
         private Factory(Protocol<T> protocol,
-                        SRValue<T> sampleRate,
+                        DataRateValue<T> sampleRate,
                         int samples,
                         int channel,
                         FormatValue<T> format,
@@ -164,7 +164,7 @@ public class VBANPacketHead<T> implements ByteArray {
 
         public static class Builder<T> implements de.kaleidox.util.model.Builder<Factory<T>> {
             private final Protocol<T> protocol;
-            private SRValue<T> sampleRate;
+            private DataRateValue<T> sampleRate;
             private int samples;
             private int channel;
             private FormatValue<T> format;
@@ -182,7 +182,7 @@ public class VBANPacketHead<T> implements ByteArray {
 
                 switch (protocol.getValue()) {
                     case 0x00:
-                        sampleRate = (SRValue<T>) SampleRate.Hz48000;
+                        sampleRate = (DataRateValue<T>) SampleRate.Hz48000;
                         samples = 255;
                         channel = 2;
                         format = (FormatValue<T>) AudioFormat.INT16;
@@ -192,7 +192,7 @@ public class VBANPacketHead<T> implements ByteArray {
                         streamName = "MIDI1";
                         break;
                     case 0x40:
-                        sampleRate = (SRValue<T>) BitsPerSecond.Bps256000;
+                        sampleRate = (DataRateValue<T>) BitsPerSecond.Bps256000;
                         samples = 0;
                         channel = 0;
                         format = (FormatValue<T>) Format.BYTE8;
@@ -212,11 +212,11 @@ public class VBANPacketHead<T> implements ByteArray {
                 return protocol;
             }
 
-            public SRValue<T> getSampleRate() {
+            public DataRateValue<T> getSampleRate() {
                 return sampleRate;
             }
 
-            public Builder setSRValue(SRValue<T> sampleRate) {
+            public Builder setSRValue(DataRateValue<T> sampleRate) {
                 this.sampleRate = sampleRate;
                 return this;
             }
