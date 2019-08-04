@@ -1,5 +1,6 @@
 package de.kaleidox.vban;
 
+import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -10,9 +11,10 @@ import de.kaleidox.util.model.Bindable;
 import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.util.model.Factory;
 import de.kaleidox.util.model.IntEnum;
-import de.kaleidox.vban.model.AudioPacket;
+import de.kaleidox.vban.model.data.AudioFrame;
 import de.kaleidox.vban.model.DataRateValue;
 import de.kaleidox.vban.model.FormatValue;
+import de.kaleidox.vban.model.data.MIDICommand;
 import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
@@ -67,20 +69,36 @@ public final class VBAN {
         return new VBANOutputStream<>(builder(Protocol.TEXT).build(), address, port);
     }
 
+    // InputStreams
+    public static VBANInputStream<AudioFrame> openAudioInputStream(InetAddress address, int port)
+            throws IOException {
+        return new VBANInputStream<>(Protocol.AUDIO, address, port);
+    }
+
+    public static VBANInputStream<MIDICommand> openMIDIInputStream(InetAddress address, int port)
+            throws IOException {
+        return new VBANInputStream<>(Protocol.SERIAL, address, port);
+    }
+
+    public static VBANInputStream<String> openTextInputStream(InetAddress address, int port)
+            throws IOException {
+        return new VBANInputStream<>(Protocol.TEXT, address, port);
+    }
+
     /**
      * Collection of protocol values, required for creating a {@link VBANPacketHead.Factory}.
      */
     public static abstract class Protocol<T> implements Bindable<T>, IntEnum {
-        public final static Protocol<AudioPacket> AUDIO = new Protocol<AudioPacket>(0x00) {
+        public final static Protocol<AudioFrame> AUDIO = new Protocol<AudioFrame>(0x00) {
             @Override
-            public AudioPacket createDataObject(byte[] bytes) {
+            public AudioFrame createDataObject(byte[] bytes) {
                 throw new UnsupportedOperationException("Audio recieving is not supported yet!");
             }
         };
-        public final static Protocol<CharSequence> SERIAL = new Protocol<CharSequence>(0x20) {
+        public final static Protocol<MIDICommand> SERIAL = new Protocol<MIDICommand>(0x20) {
             @Override
-            public CharSequence createDataObject(byte[] bytes) {
-                throw new UnsupportedOperationException("Serial recieving is not supported yet!");
+            public MIDICommand createDataObject(byte[] bytes) {
+                return MIDICommand.fromBytes(bytes);
             }
         };
         public final static Protocol<String> TEXT = new Protocol<String>(0x40) {
@@ -89,10 +107,10 @@ public final class VBAN {
                 return new String(bytes, StandardCharsets.US_ASCII);
             }
         };
-        public final static Protocol<ByteArray> SERVICE = new Protocol<ByteArray>(0x60) {
+        public final static Protocol<byte[]> SERVICE = new Protocol<byte[]>(0x60) {
             @Override
-            public ByteArray createDataObject(byte[] bytes) {
-                throw new UnsupportedOperationException("Service protocol is not supported!");
+            public byte[] createDataObject(final byte[] bytes) {
+                return bytes;
             }
         };
 
@@ -182,7 +200,7 @@ public final class VBAN {
     /**
      * Collection of sample rate indices, required for creating a {@link VBANPacketHead.Factory}.
      */
-    public enum SampleRate implements DataRateValue<AudioPacket> {
+    public enum SampleRate implements DataRateValue<AudioFrame> {
         Hz6000,
         Hz12000,
         Hz24000,
@@ -289,7 +307,7 @@ public final class VBAN {
     /**
      * Collection of format values, required for creating a {@link VBANPacketHead.Factory}.
      */
-    public enum AudioFormat implements FormatValue<AudioPacket> {
+    public enum AudioFormat implements FormatValue<AudioFrame> {
         BYTE8(0x00),
         INT16(0x01),
         INT24(0x02),

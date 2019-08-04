@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.channels.DatagramChannel;
-import java.nio.channels.IllegalBlockingModeException;
 
 import de.kaleidox.vban.packet.VBANPacket;
 
@@ -16,6 +15,7 @@ public class VBANInputStream<T> extends InputStream {
     private final VBAN.Protocol<T> expectedProtocol;
     private final InetAddress address;
     private final int port;
+    private DatagramChannel channel;
     private DatagramSocket socket;
     private byte[] buf = new byte[0];
     private int iBuf = 0;
@@ -27,8 +27,11 @@ public class VBANInputStream<T> extends InputStream {
         this.address = address;
         this.port = port;
 
-        socket = new DatagramSocket(new InetSocketAddress(address, port));
-        socket.getChannel().configureBlocking(true);
+        InetSocketAddress socketAddress = new InetSocketAddress(address, port);
+        socket = new DatagramSocket(socketAddress);
+        //todo socket.setSoTimeout(2000);
+        socket.connect(address, port);
+        //socket.send(new DatagramPacket(new byte[1], 1));
     }
 
     public synchronized T readData() throws IOException {
@@ -43,23 +46,19 @@ public class VBANInputStream<T> extends InputStream {
     }
 
     public synchronized VBANPacket.Decoded readPacket() throws IOException {
-        DatagramChannel socketChannel = socket.getChannel();
-        socketChannel.configureBlocking(false);
+        long available;
+        long skipped = skip(available = available());
+
+        if (available != skipped)
+            throw new AssertionError("Didn't skip as many bytes as available [ava="
+                    + available + ";skp=" + skipped + "]");
 
         byte[] bytes = new byte[VBANPacket.MAX_SIZE];
-        int nRead;
-        try {
-            nRead = read(bytes);
-        } catch (IllegalBlockingModeException ibmex) {
-            throw new IOException("Could not read full packet from socket.", ibmex);
-        }
 
-        if (nRead == -1)
-            throw new IllegalStateException("Nothing was read!");
-        if (nRead < VBANPacket.MAX_SIZE)
+        int nRead = read(bytes);
+
+        if (nRead != VBANPacket.MAX_SIZE)
             throw new IllegalStateException("Not a full packet was read!");
-
-        socketChannel.configureBlocking(true);
 
         return VBANPacket.decode(bytes);
     }
@@ -72,6 +71,8 @@ public class VBANInputStream<T> extends InputStream {
         if (buf.length == 0 || iBuf >= buf.length) {
             if (socket.isClosed())
                 throw new SocketException("Socket is closed");
+            if (!socket.isBound())
+                throw new SocketException("Socket is not bound");
             if (!socket.isConnected())
                 throw new SocketException("Socket is not connected");
 
@@ -89,7 +90,7 @@ public class VBANInputStream<T> extends InputStream {
 
     @Override
     public int available() {
-        return buf.length;
+        return buf.length - iBuf;
     }
 
     @Override
@@ -98,10 +99,5 @@ public class VBANInputStream<T> extends InputStream {
         socket = null;
 
         closed = true;
-    }
-
-    @Override
-    public boolean markSupported() {
-        return false;
     }
 }

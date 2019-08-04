@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import de.kaleidox.util.model.ByteArray;
+import de.kaleidox.vban.Util;
 import de.kaleidox.vban.VBAN;
 import de.kaleidox.vban.VBAN.AudioFormat;
 import de.kaleidox.vban.VBAN.BitsPerSecond;
@@ -92,7 +93,8 @@ public class VBANPacketHead<T> implements ByteArray {
                 throw new IllegalArgumentException("Bytearray is too large, must be exactly " + SIZE + " bytes long!");
 
             if (bytes[0] != 'V' || bytes[1] != 'B' || bytes[2] != 'A' || bytes[3] != 'N')
-                throw new InvalidPacketAttributeException("Invalid packet head: First bytes must be 'VBAN'");
+                throw new InvalidPacketAttributeException("Invalid packet head: First bytes must be 'VBAN' [rcv='"
+                        + new String(Util.subArray(bytes, 0, 4), StandardCharsets.US_ASCII) + "']");
 
             int protocolInt = bytes[4] & 0b111;
             protocol = VBAN.Protocol.byValue(protocolInt);
@@ -110,7 +112,6 @@ public class VBANPacketHead<T> implements ByteArray {
                 case 0x40: // TEXT
                     dataRateValue = BitsPerSecond.byValue(dataRateInt);
                     break;
-                //noinspection ConstantConditions
                 case 0x60: // SERVICE
                 default:
                     // to avoid compiler warning, set to null.
