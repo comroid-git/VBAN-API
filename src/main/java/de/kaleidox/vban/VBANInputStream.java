@@ -7,7 +7,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.nio.channels.DatagramChannel;
 
 import de.kaleidox.vban.packet.VBANPacket;
 
@@ -15,7 +14,6 @@ public class VBANInputStream<T> extends InputStream {
     private final VBAN.Protocol<T> expectedProtocol;
     private final InetAddress address;
     private final int port;
-    private DatagramChannel channel;
     private DatagramSocket socket;
     private byte[] buf = new byte[0];
     private int iBuf = 0;
@@ -30,7 +28,6 @@ public class VBANInputStream<T> extends InputStream {
         InetSocketAddress socketAddress = new InetSocketAddress(address, port);
         socket = new DatagramSocket(socketAddress);
         //todo socket.setSoTimeout(2000);
-        socket.connect(address, port);
         //socket.send(new DatagramPacket(new byte[1], 1));
     }
 
@@ -57,8 +54,10 @@ public class VBANInputStream<T> extends InputStream {
 
         int nRead = read(bytes);
 
+        /* fixme
         if (nRead != VBANPacket.MAX_SIZE)
             throw new IllegalStateException("Not a full packet was read!");
+         */
 
         return VBANPacket.decode(bytes);
     }
@@ -73,8 +72,6 @@ public class VBANInputStream<T> extends InputStream {
                 throw new SocketException("Socket is closed");
             if (!socket.isBound())
                 throw new SocketException("Socket is not bound");
-            if (!socket.isConnected())
-                throw new SocketException("Socket is not connected");
 
             byte[] bytes = new byte[VBANPacket.MAX_SIZE];
             DatagramPacket packet = new DatagramPacket(bytes, bytes.length);

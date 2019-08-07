@@ -90,6 +90,12 @@ public class VBANPacket<T> implements ByteArray {
             return new Builder<>(protocol);
         }
 
+        public static <T> Factory<T> protocolDefault(Protocol<T> protocol) {
+            return VBANPacket.Factory.builder(protocol)
+                    .setDefaultFactory()
+                    .build();
+        }
+
         public static class Builder<T> implements de.kaleidox.util.model.Builder<Factory<T>> {
             private final Protocol<T> protocol;
             private VBANPacketHead.Factory<T> headFactory;

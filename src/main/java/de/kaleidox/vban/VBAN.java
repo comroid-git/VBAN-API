@@ -1,26 +1,21 @@
 package de.kaleidox.vban;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 import de.kaleidox.util.model.Bindable;
-import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.util.model.Factory;
 import de.kaleidox.util.model.IntEnum;
-import de.kaleidox.vban.model.data.AudioFrame;
 import de.kaleidox.vban.model.DataRateValue;
 import de.kaleidox.vban.model.FormatValue;
+import de.kaleidox.vban.model.data.AudioFrame;
 import de.kaleidox.vban.model.data.MIDICommand;
 import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
 import org.jetbrains.annotations.Nullable;
-
-import static de.kaleidox.vban.packet.VBANPacket.Factory.builder;
 
 /**
  * Facade class for interacting with the API.
@@ -28,59 +23,112 @@ import static de.kaleidox.vban.packet.VBANPacket.Factory.builder;
 public final class VBAN {
     public static final int DEFAULT_PORT = 6980;
 
-    /**
-     * Opens a VBAN stream after the given specifications.
-     *
-     * @param packetFactory A factory that creates new, empty {@linkplain VBANPacket VBANPackets}.
-     * @param address       The {@link InetAddress} to send this stream's data to.
-     * @param port          The {@code port} to send data to.
-     *
-     * @return A new VBAN stream that can accept a {@link ByteArray} with {@link VBANOutputStream#sendData(Object)}.
-     * @throws SocketException See {@link DatagramSocket} constructor.
-     */
-    public static VBANOutputStream<ByteArray> openByteOutputStream(Factory<VBANPacket<ByteArray>> packetFactory, InetAddress address, int port)
+    private VBAN() {
+        // nope
+    }
+
+    // output
+
+    public static VBANOutputStream<AudioFrame> openAudioOutputStream(
+            int port)
+            throws SocketException {
+        return openAudioOutputStream(InetAddress.getLoopbackAddress(), port);
+    }
+
+    public static VBANOutputStream<AudioFrame> openAudioOutputStream(
+            InetAddress address,
+            int port)
+            throws SocketException {
+        return openAudioOutputStream(VBANPacket.Factory.protocolDefault(Protocol.AUDIO), address, port);
+    }
+
+    public static VBANOutputStream<AudioFrame> openAudioOutputStream(
+            Factory<VBANPacket<AudioFrame>> packetFactory,
+            InetAddress address,
+            int port)
             throws SocketException {
         return new VBANOutputStream<>(packetFactory, address, port);
     }
 
-    /**
-     * Opens a VBAN Remote Text stream to the specified port on {@code localhost}.
-     *
-     * @param port The {@code port} to send data to.
-     *
-     * @return A new VBAN stream that can accept a {@link String} with {@link VBANOutputStream#sendData(Object)}.
-     * @throws SocketException      See {@link DatagramSocket} constructor.
-     * @throws UnknownHostException See {@link InetAddress#getLocalHost()}.
-     */
-    public static VBANOutputStream<String> openTextOutputStream(int port) throws SocketException, UnknownHostException {
-        return openTextOutputStream(InetAddress.getLocalHost(), port);
+    public static VBANOutputStream<MIDICommand> openMidiOutputStream(
+            int port)
+            throws SocketException {
+        return openMidiOutputStream(InetAddress.getLoopbackAddress(), port);
     }
 
-    /**
-     * Opens a VBAN Remote Text stream to the specifications.
-     *
-     * @param address The {@link InetAddress} to send this stream's data to.
-     * @param port    The {@code port} to send data to.
-     *
-     * @return A new VBAN stream that can accept a {@link String} with {@link VBANOutputStream#sendData(Object)}.
-     * @throws SocketException See {@link DatagramSocket} constructor.
-     */
-    public static VBANOutputStream<String> openTextOutputStream(InetAddress address, int port) throws SocketException {
-        return new VBANOutputStream<>(builder(Protocol.TEXT).build(), address, port);
+    public static VBANOutputStream<MIDICommand> openMidiOutputStream(
+            InetAddress address,
+            int port)
+            throws SocketException {
+        return openMidiOutputStream(VBANPacket.Factory.protocolDefault(Protocol.SERIAL), address, port);
     }
 
-    // InputStreams
-    public static VBANInputStream<AudioFrame> openAudioInputStream(InetAddress address, int port)
+    public static VBANOutputStream<MIDICommand> openMidiOutputStream(
+            Factory<VBANPacket<MIDICommand>> packetFactory,
+            InetAddress address,
+            int port)
+            throws SocketException {
+        return new VBANOutputStream<>(packetFactory, address, port);
+    }
+
+    public static VBANOutputStream<String> openCommandOutputStream(
+            int port)
+            throws SocketException {
+        return openCommandOutputStream(InetAddress.getLoopbackAddress(), port);
+    }
+
+    public static VBANOutputStream<String> openCommandOutputStream(
+            InetAddress address,
+            int port)
+            throws SocketException {
+        return openCommandOutputStream(VBANPacket.Factory.protocolDefault(Protocol.TEXT), address, port);
+    }
+
+    public static VBANOutputStream<String> openCommandOutputStream(
+            Factory<VBANPacket<String>> packetFactory,
+            InetAddress address,
+            int port)
+            throws SocketException {
+        return new VBANOutputStream<>(packetFactory, address, port);
+    }
+
+    // input
+
+    public static VBANInputStream<AudioFrame> openAudioInputStream(
+            int port)
+            throws IOException {
+        return openAudioInputStream(InetAddress.getLoopbackAddress(), port);
+    }
+
+    public static VBANInputStream<AudioFrame> openAudioInputStream(
+            InetAddress address,
+            int port)
             throws IOException {
         return new VBANInputStream<>(Protocol.AUDIO, address, port);
     }
 
-    public static VBANInputStream<MIDICommand> openMIDIInputStream(InetAddress address, int port)
+    public static VBANInputStream<MIDICommand> openMidiInputStream(
+            int port)
+            throws IOException {
+        return openMidiInputStream(InetAddress.getLoopbackAddress(), port);
+    }
+
+    public static VBANInputStream<MIDICommand> openMidiInputStream(
+            InetAddress address,
+            int port)
             throws IOException {
         return new VBANInputStream<>(Protocol.SERIAL, address, port);
     }
 
-    public static VBANInputStream<String> openTextInputStream(InetAddress address, int port)
+    public static VBANInputStream<String> openCommandInputStream(
+            int port)
+            throws IOException {
+        return openCommandInputStream(InetAddress.getLoopbackAddress(), port);
+    }
+
+    public static VBANInputStream<String> openCommandInputStream(
+            InetAddress address,
+            int port)
             throws IOException {
         return new VBANInputStream<>(Protocol.TEXT, address, port);
     }
@@ -92,7 +140,7 @@ public final class VBAN {
         public final static Protocol<AudioFrame> AUDIO = new Protocol<AudioFrame>(0x00) {
             @Override
             public AudioFrame createDataObject(byte[] bytes) {
-                throw new UnsupportedOperationException("Audio recieving is not supported yet!");
+                return AudioFrame.fromBytes(bytes);
             }
         };
         public final static Protocol<MIDICommand> SERIAL = new Protocol<MIDICommand>(0x20) {
@@ -334,6 +382,31 @@ public final class VBAN {
                     return x;
 
             throw new AssertionError("Unknown AudioFormat value: " + Integer.toHexString(value));
+        }
+    }
+
+    public enum CommandFormat implements FormatValue<String> {
+        ASCII(0x00),
+        UTF8(0x10),
+        WCHAR(0x20);
+
+        private final int value;
+
+        CommandFormat(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+
+        public static <T> CommandFormat byValue(int value) {
+            for (CommandFormat x : values())
+                if (x.value == value)
+                    return x;
+
+            throw new AssertionError("Unknown Format value: " + Integer.toHexString(value));
         }
     }
 

@@ -96,14 +96,15 @@ public class VBANPacketHead<T> implements ByteArray {
                 throw new InvalidPacketAttributeException("Invalid packet head: First bytes must be 'VBAN' [rcv='"
                         + new String(Util.subArray(bytes, 0, 4), StandardCharsets.US_ASCII) + "']");
 
-            int protocolInt = bytes[4] & 0b111;
+            // FIXME: 07.08.2019 
+            int protocolInt = bytes[4] >> 3;
             protocol = VBAN.Protocol.byValue(protocolInt);
 
             // throw exception if protocol is SERVICE
             if (protocol.getValue() == 0x60)
                 throw new IllegalStateException("Service Subprotocol is not supported!");
 
-            int dataRateInt = bytes[4] >> 5;
+            int dataRateInt = bytes[4] & 0b11111;
             switch (protocol.getValue()) {
                 case 0x00: // AUDIO
                     dataRateValue = SampleRate.byValue(dataRateInt);
@@ -124,7 +125,7 @@ public class VBANPacketHead<T> implements ByteArray {
 
             channel = bytes[6];
 
-            int formatInt = bytes[7] >> 3;
+            int formatInt = bytes[7] & 0b111;
             switch (protocol.getValue()) {
                 case 0x00: // AUDIO
                     format = AudioFormat.byValue(formatInt);
@@ -207,10 +208,10 @@ public class VBANPacketHead<T> implements ByteArray {
         private int counter;
 
         private Factory(Protocol<T> protocol,
-                        DataRateValue<T> sampleRate,
+                        DataRateValue<? super T> sampleRate,
                         int samples,
                         int channel,
-                        FormatValue<T> format,
+                        FormatValue<? super T> format,
                         int codec,
                         String streamName) {
             this.protocol = protocol.getValue();
@@ -249,10 +250,10 @@ public class VBANPacketHead<T> implements ByteArray {
 
         public static class Builder<T> implements de.kaleidox.util.model.Builder<Factory<T>> {
             private final Protocol<T> protocol;
-            private DataRateValue<T> sampleRate;
+            private DataRateValue<? super T> sampleRate;
             private int samples;
             private int channel;
-            private FormatValue<T> format;
+            private FormatValue<? super T> format;
             @MagicConstant(valuesFromClass = Codec.class)
             private int codec = Codec.PCM;
             private String streamName = null;
@@ -272,7 +273,7 @@ public class VBANPacketHead<T> implements ByteArray {
                         channel = 2;
                         format = (FormatValue<T>) AudioFormat.INT16;
                         streamName = "Stream1";
-                        break;
+                        return;
                     case 0x20:
                         streamName = "MIDI1";
                         break;
@@ -297,11 +298,11 @@ public class VBANPacketHead<T> implements ByteArray {
                 return protocol;
             }
 
-            public DataRateValue<T> getSampleRate() {
+            public DataRateValue<? super T> getSampleRate() {
                 return sampleRate;
             }
 
-            public Builder setSRValue(DataRateValue<T> sampleRate) {
+            public Builder<T> setSRValue(DataRateValue<? super T> sampleRate) {
                 this.sampleRate = sampleRate;
                 return this;
             }
@@ -310,8 +311,8 @@ public class VBANPacketHead<T> implements ByteArray {
                 return samples;
             }
 
-            public Builder setSamples(byte samples) {
-                this.samples = samples;
+            public Builder<T> setSamples(byte samples) {
+                this.samples = samples - 1;
                 return this;
             }
 
@@ -319,16 +320,16 @@ public class VBANPacketHead<T> implements ByteArray {
                 return channel;
             }
 
-            public Builder setChannel(byte channel) {
-                this.channel = channel;
+            public Builder<T> setChannel(byte channel) {
+                this.channel = channel - 1;
                 return this;
             }
 
-            public FormatValue<T> getFormat() {
+            public FormatValue<? super T> getFormat() {
                 return format;
             }
 
-            public Builder setFormatValue(FormatValue<T> format) {
+            public Builder<T> setFormatValue(FormatValue<? super T> format) {
                 this.format = format;
                 return this;
             }
@@ -337,7 +338,7 @@ public class VBANPacketHead<T> implements ByteArray {
                 return codec;
             }
 
-            public Builder setCodec(int codec) {
+            public Builder<T> setCodec(int codec) {
                 this.codec = codec;
                 return this;
             }
@@ -346,7 +347,7 @@ public class VBANPacketHead<T> implements ByteArray {
                 return streamName;
             }
 
-            public Builder setStreamName(String streamName) {
+            public Builder<T> setStreamName(String streamName) {
                 this.streamName = streamName;
                 return this;
             }

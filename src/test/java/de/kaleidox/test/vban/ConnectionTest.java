@@ -18,7 +18,7 @@ import de.kaleidox.vban.packet.VBANPacket;
 
 public class ConnectionTest {
     public static void main(String[] args) throws Throwable {
-        final AudioFormat af = new AudioFormat(24000, 16, 2, true, false);
+        final AudioFormat af = new AudioFormat(48000, 16, 2, true, false);
         final DataLine.Info info = new DataLine.Info(SourceDataLine.class, af);
         final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
 
