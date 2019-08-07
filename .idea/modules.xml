@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.kaleidox.vban-api.iml" filepath="$PROJECT_DIR$/.idea/modules/de.kaleidox.vban-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.kaleidox.vban-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/de.kaleidox.vban-api.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.kaleidox.vban-api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/de.kaleidox.vban-api.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VBAN-API.iml" filepath="$PROJECT_DIR$/.idea/modules/VBAN-API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VBAN-API.main.iml" filepath="$PROJECT_DIR$/.idea/modules/VBAN-API.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VBAN-API.test.iml" filepath="$PROJECT_DIR$/.idea/modules/VBAN-API.test.iml" />
     </modules>
   </component>
 </project>

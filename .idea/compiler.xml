@@ -5,6 +5,8 @@
       <module name="de.kaleidox.vban-api.compat" target="1.7" />
       <module name="de.kaleidox.vban-api.main" target="1.7" />
       <module name="de.kaleidox.vban-api.test" target="1.7" />
+      <module name="VBAN-API.main" target="1.7" />
+      <module name="VBAN-API.test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
