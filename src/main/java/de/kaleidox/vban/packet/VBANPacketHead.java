@@ -9,6 +9,7 @@ import de.kaleidox.vban.VBAN;
 import de.kaleidox.vban.VBAN.AudioFormat;
 import de.kaleidox.vban.VBAN.BitsPerSecond;
 import de.kaleidox.vban.VBAN.Codec;
+import de.kaleidox.vban.VBAN.CommandFormat;
 import de.kaleidox.vban.VBAN.Format;
 import de.kaleidox.vban.VBAN.Protocol;
 import de.kaleidox.vban.VBAN.SampleRate;
@@ -96,15 +97,14 @@ public class VBANPacketHead<T> implements ByteArray {
                 throw new InvalidPacketAttributeException("Invalid packet head: First bytes must be 'VBAN' [rcv='"
                         + new String(Util.subArray(bytes, 0, 4), StandardCharsets.US_ASCII) + "']");
 
-            // FIXME: 07.08.2019 
-            int protocolInt = bytes[4] >> 3;
+            int protocolInt = bytes[4] & 0b11111000;
             protocol = VBAN.Protocol.byValue(protocolInt);
 
             // throw exception if protocol is SERVICE
             if (protocol.getValue() == 0x60)
                 throw new IllegalStateException("Service Subprotocol is not supported!");
 
-            int dataRateInt = bytes[4] & 0b11111;
+            int dataRateInt = bytes[4] & 0b00000111;
             switch (protocol.getValue()) {
                 case 0x00: // AUDIO
                     dataRateValue = SampleRate.byValue(dataRateInt);
@@ -121,18 +121,20 @@ public class VBANPacketHead<T> implements ByteArray {
                     break;
             }
 
-            samples = bytes[5];
+            // +1 to avoid indexed counting
+            samples = bytes[5] + 1;
+            channel = bytes[6] + 1;
 
-            channel = bytes[6];
-
-            int formatInt = bytes[7] & 0b111;
+            int formatInt = bytes[7] & 0b00011111;
             switch (protocol.getValue()) {
                 case 0x00: // AUDIO
                     format = AudioFormat.byValue(formatInt);
                     break;
                 case 0x20: // SERIAL
-                case 0x40: // TEXT
                     format = Format.byValue(formatInt);
+                    break;
+                case 0x40: // TEXT
+                    format = CommandFormat.byValue(formatInt);
                     break;
                 case 0x60: // SERVICE
                 default:
@@ -145,7 +147,7 @@ public class VBANPacketHead<T> implements ByteArray {
             // reserved bit
             // int reservedBit = (bytes[7] >> 4) & 0b1;
 
-            int codecInt = bytes[7] & 0xFF;
+            int codecInt = bytes[7] & 0b11110000;
             switch (codecInt) {
                 case Codec.PCM:
                 case Codec.VBCA:
@@ -160,7 +162,7 @@ public class VBANPacketHead<T> implements ByteArray {
 
             byte[] nameBytes = new byte[16];
             System.arraycopy(bytes, 8, nameBytes, 0, 16);
-            streamName = new String(nameBytes, StandardCharsets.US_ASCII);
+            streamName = Util.bytesToString(nameBytes, StandardCharsets.US_ASCII);
 
             byte[] frameBytes = new byte[4];
             System.arraycopy(bytes, 24, frameBytes, 0, 4);

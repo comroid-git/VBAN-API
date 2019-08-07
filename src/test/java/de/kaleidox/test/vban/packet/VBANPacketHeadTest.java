@@ -1,13 +1,7 @@
 package de.kaleidox.test.vban.packet;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.SocketException;
-
 import de.kaleidox.vban.VBAN;
-import de.kaleidox.vban.VBANOutputStream;
 import de.kaleidox.vban.exception.InvalidPacketAttributeException;
-import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
 import org.junit.Before;
@@ -22,7 +16,7 @@ public class VBANPacketHeadTest {
     public void setUp() {
         headFactory = VBANPacketHead.Factory.builder(VBAN.Protocol.TEXT)
                 .setSRValue(VBAN.BitsPerSecond.Bps150)
-                .setFormatValue(VBAN.Format.BYTE8)
+                .setFormatValue(VBAN.CommandFormat.UTF8)
                 .setChannel((byte) 5)
                 .setSamples((byte) 8)
                 .setCodec(VBAN.Codec.VBCA)
@@ -52,10 +46,10 @@ public class VBANPacketHeadTest {
         VBANPacketHead.Decoded decoded = VBANPacketHead.decode(generated);
 
         assertEquals(VBAN.BitsPerSecond.Bps150, decoded.getDataRateValue());
-        assertEquals(VBAN.Format.BYTE8, decoded.getFormat());
+        assertEquals(VBAN.CommandFormat.UTF8, decoded.getFormat());
         assertEquals(5, decoded.getChannel());
         assertEquals(8, decoded.getSamples());
         assertEquals(VBAN.Codec.VBCA, decoded.getCodec());
-        assertEquals("Teststream", decoded.getStreamName());
+        assertEquals("Textstream", decoded.getStreamName());
     }
 }

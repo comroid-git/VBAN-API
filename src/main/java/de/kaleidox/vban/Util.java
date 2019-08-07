@@ -1,6 +1,7 @@
 package de.kaleidox.vban;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import de.kaleidox.util.model.ByteArray;
@@ -106,5 +107,17 @@ public class Util {
         System.arraycopy(src, iLow, bytes, 0, bytes.length);
 
         return bytes;
+    }
+
+    public static String bytesToString(byte[] bytes, Charset charset) {
+        StringBuilder str = new StringBuilder();
+
+        for (byte b : bytes) {
+            if (b == 0) break;
+
+            str.append(charset.decode(ByteBuffer.wrap(new byte[]{b})));
+        }
+
+        return str.toString();
     }
 }

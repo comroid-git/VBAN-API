@@ -19,7 +19,6 @@ public class VBANInputStream<T> extends InputStream {
     private int iBuf = 0;
     private boolean closed = false;
 
-    //todo make package-private
     public VBANInputStream(VBAN.Protocol<T> expectedProtocol, InetAddress address, int port) throws IOException {
         this.expectedProtocol = expectedProtocol;
         this.address = address;
@@ -27,8 +26,10 @@ public class VBANInputStream<T> extends InputStream {
 
         InetSocketAddress socketAddress = new InetSocketAddress(address, port);
         socket = new DatagramSocket(socketAddress);
-        //todo socket.setSoTimeout(2000);
-        //socket.send(new DatagramPacket(new byte[1], 1));
+    }
+
+    public void setSocketTimeout(int ms) throws SocketException {
+        socket.setSoTimeout(ms);
     }
 
     public synchronized T readData() throws IOException {
@@ -53,11 +54,6 @@ public class VBANInputStream<T> extends InputStream {
         byte[] bytes = new byte[VBANPacket.MAX_SIZE];
 
         int nRead = read(bytes);
-
-        /* fixme
-        if (nRead != VBANPacket.MAX_SIZE)
-            throw new IllegalStateException("Not a full packet was read!");
-         */
 
         return VBANPacket.decode(bytes);
     }

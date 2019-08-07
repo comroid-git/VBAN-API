@@ -17,29 +17,6 @@ import de.kaleidox.vban.model.data.AudioFrame;
 import de.kaleidox.vban.packet.VBANPacket;
 
 public class ConnectionTest {
-    public static void main(String[] args) throws Throwable {
-        final AudioFormat af = new AudioFormat(48000, 16, 2, true, false);
-        final DataLine.Info info = new DataLine.Info(SourceDataLine.class, af);
-        final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-
-        VBANInputStream<AudioFrame> vban = VBAN.openAudioInputStream(InetAddress.getByName("192.168.0.10"), 4194);
-        line.open(af, 4096);
-        line.start();
-        while (true) {
-            AudioFrame frame;
-
-            try {
-                frame = vban.readData();
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
-
-            byte[] bytes = frame.getBytes();
-            line.write(bytes, 0, bytes.length);
-        }
-    }
-
     private void m() throws Throwable {
         InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName("192.168.0.10"), 4194);
         DatagramSocket socket = new DatagramSocket(socketAddress);
@@ -62,5 +39,28 @@ public class ConnectionTest {
         // this is never reached
         byte[] buf = bytes;
         int iBuf = 0;
+    }
+
+    public static void main(String[] args) throws Throwable {
+        final AudioFormat af = new AudioFormat(48000, 16, 2, true, false);
+        final DataLine.Info info = new DataLine.Info(SourceDataLine.class, af);
+        final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
+
+        VBANInputStream<AudioFrame> vban = VBAN.openAudioInputStream(InetAddress.getByName("192.168.0.10"), 4194);
+        line.open(af, 4096);
+        line.start();
+        while (true) {
+            AudioFrame frame;
+
+            try {
+                frame = vban.readData();
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+
+            byte[] bytes = frame.getBytes();
+            line.write(bytes, 0, bytes.length);
+        }
     }
 }

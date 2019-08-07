@@ -23,7 +23,7 @@ public class VBANOutputStream<T> extends OutputStream {
     private boolean closed = false;
 
     /**
-     * Private constructor. Use {@link VBAN#openByteOutputStream(Factory, InetAddress, int)} for creating raw instances.
+     * Private constructor. Use {@link VBAN#openMidiOutputStream(Factory, InetAddress, int)} for creating raw instances.
      *
      * @param packetFactory A factory that creates new instances of VBANPacket. See {@link VBANPacket.Factory.Builder}
      * @param address       The InetAddress to send to.
@@ -31,7 +31,7 @@ public class VBANOutputStream<T> extends OutputStream {
      *
      * @throws SocketException See {@link DatagramSocket} constructor.
      */
-    VBANOutputStream(Factory<VBANPacket<T>> packetFactory, InetAddress address, int port)
+    public VBANOutputStream(Factory<VBANPacket<T>> packetFactory, InetAddress address, int port)
             throws SocketException {
         this.packetFactory = packetFactory;
         this.address = address;
