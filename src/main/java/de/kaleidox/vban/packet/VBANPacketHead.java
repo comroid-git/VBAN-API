@@ -16,10 +16,10 @@ import de.kaleidox.vban.VBAN.SampleRate;
 import de.kaleidox.vban.exception.InvalidPacketAttributeException;
 import de.kaleidox.vban.model.DataRateValue;
 import de.kaleidox.vban.model.FormatValue;
+import de.kaleidox.vban.model.UnfinishedByteArray;
 
 import org.intellij.lang.annotations.MagicConstant;
 
-import static de.kaleidox.vban.Util.appendByteArray;
 import static de.kaleidox.vban.Util.checkRange;
 import static de.kaleidox.vban.Util.intToByteArray;
 import static de.kaleidox.vban.Util.stringToBytesASCII;
@@ -29,10 +29,11 @@ import static de.kaleidox.vban.packet.VBANPacketHead.Factory.builder;
 public class VBANPacketHead<T> implements ByteArray {
     public final static int SIZE = 28;
 
-    private final byte[] bytes;
+    private final UnfinishedByteArray unfinishedByteArray;
 
     private VBANPacketHead(byte[] bytes) {
-        this.bytes = bytes;
+        unfinishedByteArray = new UnfinishedByteArray(SIZE);
+        unfinishedByteArray.append(bytes);
     }
 
     private VBANPacketHead(int protocol,
@@ -43,21 +44,22 @@ public class VBANPacketHead<T> implements ByteArray {
                            int codec,
                            String streamName,
                            int frameCounter) {
-        byte[] bytes = new byte[0];
         checkRange(samples, 0, 255);
         checkRange(channel, 0, 255);
 
-        bytes = appendByteArray(bytes, "VBAN".getBytes());
-        bytes = appendByteArray(bytes, (byte) (protocol | sampleRateIndex));
-        bytes = appendByteArray(bytes, (byte) samples, (byte) channel);
-        bytes = appendByteArray(bytes, (byte) (format | codec));
-        bytes = appendByteArray(bytes, trimArray(stringToBytesASCII(streamName), 16));
-        this.bytes = appendByteArray(bytes, intToByteArray(frameCounter, 4));
+        unfinishedByteArray = new UnfinishedByteArray(SIZE);
+
+        unfinishedByteArray.append("VBAN".getBytes());
+        unfinishedByteArray.append((byte) (protocol | sampleRateIndex));
+        unfinishedByteArray.append((byte) samples, (byte) channel);
+        unfinishedByteArray.append((byte) (format | codec));
+        unfinishedByteArray.append(trimArray(stringToBytesASCII(streamName), 16));
+        unfinishedByteArray.append(intToByteArray(frameCounter, 4));
     }
 
     @Override
     public byte[] getBytes() {
-        return bytes;
+        return unfinishedByteArray.getBytes();
     }
 
     /**
@@ -145,7 +147,7 @@ public class VBANPacketHead<T> implements ByteArray {
             }
 
             // reserved bit
-            // int reservedBit = (bytes[7] >> 4) & 0b1;
+            int reservedBit = bytes[7] & 0b11101111;
 
             int codecInt = bytes[7] & 0b11110000;
             switch (codecInt) {

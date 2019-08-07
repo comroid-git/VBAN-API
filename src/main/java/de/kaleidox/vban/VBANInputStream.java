@@ -19,7 +19,7 @@ public class VBANInputStream<T> extends InputStream {
     private int iBuf = 0;
     private boolean closed = false;
 
-    public VBANInputStream(VBAN.Protocol<T> expectedProtocol, InetAddress address, int port) throws IOException {
+    public VBANInputStream(VBAN.Protocol<T> expectedProtocol, InetAddress address, int port) throws SocketException {
         this.expectedProtocol = expectedProtocol;
         this.address = address;
         this.port = port;

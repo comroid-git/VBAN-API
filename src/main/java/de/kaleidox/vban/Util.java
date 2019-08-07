@@ -29,24 +29,6 @@ public class Util {
     }
 
     /**
-     * Creates a new byte-array with the length of {@code ba1.length + ba2.length}, which will be filled with all bytes
-     * of {@code ba1} and {@code ba2} in order, and then returns the new array.
-     *
-     * @param ba1 The first, base byte-array.
-     * @param ba2 The bytes to be appended.
-     *
-     * @return The new, larger byte-array.
-     */
-    public static byte[] appendByteArray(byte[] ba1, byte... ba2) {
-        byte[] bytes = new byte[ba1.length + ba2.length];
-
-        arraycopy(ba1, 0, bytes, 0, ba1.length);
-        arraycopy(ba2, 0, bytes, ba1.length, ba2.length);
-
-        return bytes;
-    }
-
-    /**
      * Trims the base array to the given size, filling with {@code nulls} if necessary.
      *
      * @param base The base array.
@@ -73,7 +55,7 @@ public class Util {
     }
 
     /**
-     * Converts an object into a byte-array. Used by {@link VBAN#sendData(Object)}.
+     * Converts an object into a byte-array. Used by {@link VBANOutputStream#sendData(Object)}.
      *
      * @param data The object to convert.
      *
@@ -101,6 +83,15 @@ public class Util {
             throw new IllegalArgumentException(String.format("Integer out of range. [%d;%d;%d]", from, check, to));
     }
 
+    /**
+     * Creates a sub-array of the given array.
+     *
+     * @param src   The origin array.
+     * @param iLow  The index at which the sub-array should start.
+     * @param iHigh The index at which the sub-array should stop. Exclusive.
+     *
+     * @return The new sub-array.
+     */
     public static byte[] subArray(byte[] src, int iLow, int iHigh) {
         byte[] bytes = new byte[iHigh - iLow];
 
@@ -109,6 +100,15 @@ public class Util {
         return bytes;
     }
 
+    /**
+     * Creates a {@link String} from the given bytearray and the given {@link Charset}.
+     * Any bytes in the bytearray that are {@code 0} are ignored.
+     *
+     * @param bytes   The origin bytes.
+     * @param charset The charset to use for decoding the given bytearray.
+     *
+     * @return The decoded {@link String}.
+     */
     public static String bytesToString(byte[] bytes, Charset charset) {
         StringBuilder str = new StringBuilder();
 

@@ -8,9 +8,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import de.kaleidox.util.model.Factory;
+import de.kaleidox.vban.model.UnfinishedByteArray;
 import de.kaleidox.vban.packet.VBANPacket;
 
-import static de.kaleidox.vban.Util.appendByteArray;
 import static de.kaleidox.vban.Util.createByteArray;
 import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE;
 
@@ -19,7 +19,7 @@ public class VBANOutputStream<T> extends OutputStream {
     private final int port;
     private Factory<VBANPacket<T>> packetFactory;
     private DatagramSocket socket;
-    private byte[] buf = new byte[0];
+    private UnfinishedByteArray buf;
     private boolean closed = false;
 
     /**
@@ -38,6 +38,7 @@ public class VBANOutputStream<T> extends OutputStream {
         this.port = port;
 
         socket = new DatagramSocket();
+        buf = new UnfinishedByteArray(MAX_SIZE, true);
     }
 
     /**
@@ -70,9 +71,9 @@ public class VBANOutputStream<T> extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-        if (buf.length + 1 > MAX_SIZE)
+        if (buf.length() + 1 > MAX_SIZE)
             throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
-        buf = appendByteArray(buf, (byte) b);
+        buf.append((byte) b);
         if ((char) b == '\n') flush();
     }
 
@@ -86,11 +87,13 @@ public class VBANOutputStream<T> extends OutputStream {
     @Override
     public synchronized void flush() throws IOException {
         if (closed) throw new IOException("Stream is closed");
-        if (buf.length > MAX_SIZE)
+        if (buf.length() > MAX_SIZE)
             throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
-        byte[] bytes = packetFactory.create().setData(buf).getBytes();
+        byte[] bytes = packetFactory.create()
+                .setData(buf.getBytes())
+                .getBytes();
         socket.send(new DatagramPacket(bytes, bytes.length, address, port));
-        buf = new byte[0];
+        buf = new UnfinishedByteArray(MAX_SIZE, true);
     }
 
     /**

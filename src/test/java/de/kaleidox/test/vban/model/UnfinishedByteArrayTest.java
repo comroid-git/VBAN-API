@@ -36,4 +36,17 @@ public class UnfinishedByteArrayTest {
         //noinspection ConfusingArgumentToVarargsMethod
         array.append(null);
     }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void testFixedSize() throws Exception {
+        UnfinishedByteArray fixed = new UnfinishedByteArray(2, true);
+
+        try {
+            fixed.append(new byte[]{72, 19});
+        } catch (ArrayIndexOutOfBoundsException any) {
+            throw new Exception(any);
+        }
+
+        fixed.append((byte) 15);
+    }
 }

@@ -1,6 +1,6 @@
 package de.kaleidox.vban;
 
-import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +15,7 @@ import de.kaleidox.vban.model.data.MIDICommand;
 import de.kaleidox.vban.packet.VBANPacket;
 import de.kaleidox.vban.packet.VBANPacketHead;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,18 +24,43 @@ import org.jetbrains.annotations.Nullable;
 public final class VBAN {
     public static final int DEFAULT_PORT = 6980;
 
+    /**
+     * nope
+     */
     private VBAN() {
         // nope
     }
 
     // output
 
+    /**
+     * Opens a new audio sending stream that uses the
+     * {@linkplain VBANPacket.Factory#protocolDefault(Protocol) default packet factory}
+     * for the {@linkplain Protocol#AUDIO audio protocol} and defaults to the
+     * {@linkplain InetAddress#getLoopbackAddress() loopback address}.
+     *
+     * @param port The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream audio sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<AudioFrame> openAudioOutputStream(
             int port)
             throws SocketException {
         return openAudioOutputStream(InetAddress.getLoopbackAddress(), port);
     }
 
+    /**
+     * Opens a new audio sending stream that uses the
+     * {@linkplain VBANPacket.Factory#protocolDefault(Protocol) default packet factory}
+     * for the {@linkplain Protocol#AUDIO audio protocol}.
+     *
+     * @param address The {@linkplain InetAddress address} to bind to.
+     * @param port    The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream audio sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<AudioFrame> openAudioOutputStream(
             InetAddress address,
             int port)
@@ -42,6 +68,16 @@ public final class VBAN {
         return openAudioOutputStream(VBANPacket.Factory.protocolDefault(Protocol.AUDIO), address, port);
     }
 
+    /**
+     * Opens a new audio sending stream.
+     *
+     * @param packetFactory A factory to use for creating new {@linkplain VBANPacket VBANPackets}.
+     * @param address       The {@linkplain InetAddress address} to bind to.
+     * @param port          The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream audio sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<AudioFrame> openAudioOutputStream(
             Factory<VBANPacket<AudioFrame>> packetFactory,
             InetAddress address,
@@ -50,12 +86,34 @@ public final class VBAN {
         return new VBANOutputStream<>(packetFactory, address, port);
     }
 
+    /**
+     * Opens a new midi sending stream that uses the
+     * {@linkplain VBANPacket.Factory#protocolDefault(Protocol) default packet factory}
+     * for the {@linkplain Protocol#SERIAL midi protocol} and defaults to the
+     * {@linkplain InetAddress#getLoopbackAddress() loopback address}.
+     *
+     * @param port The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream midi sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<MIDICommand> openMidiOutputStream(
             int port)
             throws SocketException {
         return openMidiOutputStream(InetAddress.getLoopbackAddress(), port);
     }
 
+    /**
+     * Opens a new midi sending stream that uses the
+     * {@linkplain VBANPacket.Factory#protocolDefault(Protocol) default packet factory}
+     * for the {@linkplain Protocol#SERIAL midi protocol}.
+     *
+     * @param address The {@linkplain InetAddress address} to bind to.
+     * @param port    The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream midi sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<MIDICommand> openMidiOutputStream(
             InetAddress address,
             int port)
@@ -63,6 +121,16 @@ public final class VBAN {
         return openMidiOutputStream(VBANPacket.Factory.protocolDefault(Protocol.SERIAL), address, port);
     }
 
+    /**
+     * Opens a new midi sending stream.
+     *
+     * @param packetFactory A factory to use for creating new {@linkplain VBANPacket VBANPackets}.
+     * @param address       The {@linkplain InetAddress address} to bind to.
+     * @param port          The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream midi sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<MIDICommand> openMidiOutputStream(
             Factory<VBANPacket<MIDICommand>> packetFactory,
             InetAddress address,
@@ -71,12 +139,34 @@ public final class VBAN {
         return new VBANOutputStream<>(packetFactory, address, port);
     }
 
+    /**
+     * Opens a new command sending stream that uses the
+     * {@linkplain VBANPacket.Factory#protocolDefault(Protocol) default packet factory}
+     * for the {@linkplain Protocol#TEXT command protocol} and defaults to the
+     * {@linkplain InetAddress#getLoopbackAddress() loopback address}.
+     *
+     * @param port The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream command sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<String> openCommandOutputStream(
             int port)
             throws SocketException {
         return openCommandOutputStream(InetAddress.getLoopbackAddress(), port);
     }
 
+    /**
+     * Opens a new command sending stream that uses the
+     * {@linkplain VBANPacket.Factory#protocolDefault(Protocol) default packet factory}
+     * for the {@linkplain Protocol#TEXT command protocol}.
+     *
+     * @param address The {@linkplain InetAddress address} to bind to.
+     * @param port    The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream command sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<String> openCommandOutputStream(
             InetAddress address,
             int port)
@@ -84,6 +174,16 @@ public final class VBAN {
         return openCommandOutputStream(VBANPacket.Factory.protocolDefault(Protocol.TEXT), address, port);
     }
 
+    /**
+     * Opens a new command sending stream.
+     *
+     * @param packetFactory A factory to use for creating new {@linkplain VBANPacket VBANPackets}.
+     * @param address       The {@linkplain InetAddress address} to bind to.
+     * @param port          The port to bind to.
+     *
+     * @return A new {@linkplain VBANOutputStream command sender stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANOutputStream<String> openCommandOutputStream(
             Factory<VBANPacket<String>> packetFactory,
             InetAddress address,
@@ -94,42 +194,96 @@ public final class VBAN {
 
     // input
 
+    /**
+     * Opens a new audio receiving stream that binds to the
+     * {@linkplain InetAddress#getLoopbackAddress() loopback address}.
+     *
+     * @param port The port to bind to.
+     *
+     * @return A new {@linkplain VBANInputStream audio receiver stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANInputStream<AudioFrame> openAudioInputStream(
             int port)
-            throws IOException {
+            throws SocketException {
         return openAudioInputStream(InetAddress.getLoopbackAddress(), port);
     }
 
+    /**
+     * Opens a new audio receiving stream.
+     *
+     * @param address The {@linkplain InetAddress address} to bind to.
+     * @param port    The port to bind to.
+     *
+     * @return A new {@linkplain VBANInputStream audio receiver stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANInputStream<AudioFrame> openAudioInputStream(
             InetAddress address,
             int port)
-            throws IOException {
+            throws SocketException {
         return new VBANInputStream<>(Protocol.AUDIO, address, port);
     }
 
+    /**
+     * Opens a new midi receiving stream that binds to the
+     * {@linkplain InetAddress#getLoopbackAddress() loopback address}.
+     *
+     * @param port The port to bind to.
+     *
+     * @return A new {@linkplain VBANInputStream midi receiver stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANInputStream<MIDICommand> openMidiInputStream(
             int port)
-            throws IOException {
+            throws SocketException {
         return openMidiInputStream(InetAddress.getLoopbackAddress(), port);
     }
 
+    /**
+     * Opens a new midi receiving stream.
+     *
+     * @param address The {@linkplain InetAddress address} to bind to.
+     * @param port    The port to bind to.
+     *
+     * @return A new {@linkplain VBANInputStream midi receiver stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANInputStream<MIDICommand> openMidiInputStream(
             InetAddress address,
             int port)
-            throws IOException {
+            throws SocketException {
         return new VBANInputStream<>(Protocol.SERIAL, address, port);
     }
 
+    /**
+     * Opens a new command receiving stream that binds to the
+     * {@linkplain InetAddress#getLoopbackAddress() loopback address}.
+     *
+     * @param port The port to bind to.
+     *
+     * @return A new {@linkplain VBANInputStream command receiver stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANInputStream<String> openCommandInputStream(
             int port)
-            throws IOException {
+            throws SocketException {
         return openCommandInputStream(InetAddress.getLoopbackAddress(), port);
     }
 
+    /**
+     * Opens a new command receiving stream.
+     *
+     * @param address The {@linkplain InetAddress address} to bind to.
+     * @param port    The port to bind to.
+     *
+     * @return A new {@linkplain VBANInputStream command receiver stream}.
+     * @throws SocketException See {@link DatagramSocket} constructor.
+     */
     public static VBANInputStream<String> openCommandInputStream(
             InetAddress address,
             int port)
-            throws IOException {
+            throws SocketException {
         return new VBANInputStream<>(Protocol.TEXT, address, port);
     }
 
@@ -283,7 +437,8 @@ public final class VBAN {
             return SampleRate.class.isAssignableFrom(type);
         }
 
-        @Override public SampleRate asSampleRate() {
+        @Override
+        public @NotNull SampleRate asSampleRate() {
             return this;
         }
 
@@ -343,7 +498,7 @@ public final class VBAN {
         }
 
         @Override
-        public BitsPerSecond asBitsPerSecond() {
+        public @NotNull BitsPerSecond asBitsPerSecond() {
             return this;
         }
 
@@ -376,6 +531,26 @@ public final class VBAN {
             return value;
         }
 
+        @Override
+        public <R> boolean isType(Class<R> type) {
+            return AudioFormat.class.isAssignableFrom(type);
+        }
+
+        @Override
+        public @NotNull AudioFormat asAudioFormat() {
+            return this;
+        }
+
+        @Override
+        public @Nullable CommandFormat asCommandFormat() {
+            return null;
+        }
+
+        @Override
+        public @Nullable Format asFormat() {
+            return null;
+        }
+
         public static <T> AudioFormat byValue(int value) {
             for (AudioFormat x : values())
                 if (x.value == value)
@@ -401,6 +576,26 @@ public final class VBAN {
             return value;
         }
 
+        @Override
+        public <R> boolean isType(Class<R> type) {
+            return CommandFormat.class.isAssignableFrom(type);
+        }
+
+        @Override
+        public @Nullable AudioFormat asAudioFormat() {
+            return null;
+        }
+
+        @Override
+        public @NotNull CommandFormat asCommandFormat() {
+            return this;
+        }
+
+        @Override
+        public @Nullable Format asFormat() {
+            return null;
+        }
+
         public static <T> CommandFormat byValue(int value) {
             for (CommandFormat x : values())
                 if (x.value == value)
@@ -422,6 +617,26 @@ public final class VBAN {
         @Override
         public int getValue() {
             return value;
+        }
+
+        @Override
+        public <R> boolean isType(Class<R> type) {
+            return Format.class.isAssignableFrom(type);
+        }
+
+        @Override
+        public @Nullable AudioFormat asAudioFormat() {
+            return null;
+        }
+
+        @Override
+        public @Nullable CommandFormat asCommandFormat() {
+            return null;
+        }
+
+        @Override
+        public @NotNull Format asFormat() {
+            return this;
         }
 
         public static <T> Format byValue(int value) {

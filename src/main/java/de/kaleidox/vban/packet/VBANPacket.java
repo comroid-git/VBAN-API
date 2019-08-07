@@ -3,8 +3,8 @@ package de.kaleidox.vban.packet;
 import de.kaleidox.util.model.ByteArray;
 import de.kaleidox.vban.VBAN.Protocol;
 import de.kaleidox.vban.exception.InvalidPacketAttributeException;
+import de.kaleidox.vban.model.UnfinishedByteArray;
 
-import static de.kaleidox.vban.Util.appendByteArray;
 import static de.kaleidox.vban.Util.subArray;
 
 /**
@@ -13,8 +13,9 @@ import static de.kaleidox.vban.Util.subArray;
 public class VBANPacket<T> implements ByteArray {
     public static final int MAX_SIZE = 1436;
     public static final int SIZE_WITHOUT_HEAD = MAX_SIZE - VBANPacketHead.SIZE;
+    protected final UnfinishedByteArray unfinishedByteArray;
     protected VBANPacketHead<T> head;
-    protected byte[] bytes;
+    private boolean hasData = false;
 
     /**
      * Private constructor.
@@ -23,11 +24,15 @@ public class VBANPacket<T> implements ByteArray {
      */
     private VBANPacket(VBANPacketHead<T> head) {
         this.head = head;
+        this.unfinishedByteArray = new UnfinishedByteArray(MAX_SIZE, true);
     }
 
-    public VBANPacket(VBANPacketHead<T> head, byte[] bytes) {
+    public VBANPacket(VBANPacketHead<T> head, byte[] data) {
         this.head = head;
-        this.bytes = bytes;
+        this.unfinishedByteArray = new UnfinishedByteArray(MAX_SIZE);
+
+        unfinishedByteArray.append(head.getBytes());
+        attachData(data);
     }
 
     /**
@@ -38,16 +43,25 @@ public class VBANPacket<T> implements ByteArray {
      * @return This instance.
      * @throws IllegalArgumentException If the given byte-array is too large.
      */
-    public VBANPacket<T> setData(byte[] data) throws IllegalArgumentException {
-        if (data.length > MAX_SIZE)
-            throw new IllegalArgumentException("Data is too large to be sent! Must be smaller than " + MAX_SIZE);
-        bytes = data;
+    public VBANPacket<T> setData(byte[] data) throws IllegalStateException, IllegalArgumentException {
+        if (hasData)
+            throw new IllegalStateException("Packet already has data attached");
+        attachData(data);
         return this;
     }
 
     @Override
     public byte[] getBytes() {
-        return appendByteArray(head.getBytes(), bytes);
+        return unfinishedByteArray.getBytes();
+    }
+
+    private void attachData(byte[] data) throws IllegalArgumentException {
+        if (data.length > MAX_SIZE)
+            throw new IllegalArgumentException("Data is too large to be sent, must be smaller than " + MAX_SIZE);
+
+        unfinishedByteArray.append(data);
+
+        hasData = true;
     }
 
     public static VBANPacket.Decoded decode(byte[] bytes) throws InvalidPacketAttributeException {
