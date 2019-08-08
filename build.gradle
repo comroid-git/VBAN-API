@@ -43,7 +43,7 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:17.0.0'
 
     testImplementation 'junit:junit:4.12'
-    testCompile 'org.codehaus.groovy:groovy-all:2.5.7'
+    testCompile 'org.codehaus.groovy:groovy-all:2.5.8'
 }
 
 sourceSets {
