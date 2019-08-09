@@ -36,7 +36,7 @@ public class VBANPacketHead<T> implements ByteArray {
         unfinishedByteArray.append(bytes);
     }
 
-    private VBANPacketHead(int protocol,
+    public VBANPacketHead(int protocol,
                            int sampleRateIndex,
                            int samples,
                            int channel,
