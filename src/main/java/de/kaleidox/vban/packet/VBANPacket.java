@@ -12,7 +12,7 @@ import static de.kaleidox.vban.Util.subArray;
  */
 public class VBANPacket<T> implements ByteArray {
     public static final int MAX_SIZE = 1436;
-    public static final int SIZE_WITHOUT_HEAD = MAX_SIZE - VBANPacketHead.SIZE;
+    public static final int MAX_SIZE_WITHOUT_HEAD = MAX_SIZE - VBANPacketHead.SIZE;
     protected final UnfinishedByteArray unfinishedByteArray;
     protected VBANPacketHead<T> head;
     private boolean hasData = false;
