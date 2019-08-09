@@ -32,7 +32,7 @@ public class VBANPacketHead<T> implements ByteArray {
     private final UnfinishedByteArray unfinishedByteArray;
 
     private VBANPacketHead(byte[] bytes) {
-        unfinishedByteArray = new UnfinishedByteArray(SIZE);
+        unfinishedByteArray = new UnfinishedByteArray(SIZE, true);
         unfinishedByteArray.append(bytes);
     }
 
@@ -47,7 +47,7 @@ public class VBANPacketHead<T> implements ByteArray {
         checkRange(samples, 0, 255);
         checkRange(channel, 0, 255);
 
-        unfinishedByteArray = new UnfinishedByteArray(SIZE);
+        unfinishedByteArray = new UnfinishedByteArray(SIZE, true);
 
         unfinishedByteArray.append("VBAN".getBytes());
         unfinishedByteArray.append((byte) (protocol | sampleRateIndex));
