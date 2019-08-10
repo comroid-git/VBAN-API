@@ -551,7 +551,7 @@ public final class VBAN {
             return null;
         }
 
-        public static <T> AudioFormat byValue(int value) {
+        public static AudioFormat byValue(int value) {
             for (AudioFormat x : values())
                 if (x.value == value)
                     return x;
