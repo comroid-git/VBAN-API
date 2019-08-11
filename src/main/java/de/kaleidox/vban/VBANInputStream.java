@@ -37,7 +37,7 @@ public class VBANInputStream<T> extends InputStream {
         VBAN.Protocol<?> rcvProt;
 
         if (!(rcvProt = packet.getHead().getProtocol()).equals(expectedProtocol))
-            throw new IllegalStateException("Expected Protocol mismatches recieved protocol " +
+            throw new IllegalStateException("Expected Protocol mismatches received protocol " +
                     "[exp:" + expectedProtocol + ";rcv:" + rcvProt + "]");
 
         return expectedProtocol.createDataObject(packet.getBytes());
