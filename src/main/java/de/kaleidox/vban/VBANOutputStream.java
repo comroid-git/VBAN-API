@@ -13,6 +13,7 @@ import de.kaleidox.vban.packet.VBANPacket;
 
 import static de.kaleidox.vban.Util.createByteArray;
 import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE;
+import static de.kaleidox.vban.packet.VBANPacket.MAX_SIZE_WITHOUT_HEAD;
 
 public class VBANOutputStream<T> extends OutputStream {
     private final InetAddress address;
@@ -71,7 +72,7 @@ public class VBANOutputStream<T> extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-        if (buf.length() + 1 > MAX_SIZE)
+        if (buf.length() + 1 > MAX_SIZE_WITHOUT_HEAD)
             throw new IOException("Byte array is too large, must be smaller than " + MAX_SIZE);
         buf.append((byte) b);
         if ((char) b == '\n') flush();

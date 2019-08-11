@@ -15,7 +15,7 @@ import org.junit.Test;
 public class VBANExceptionsTest {
     @Test
     public void testStringWithinBounds() throws IOException {
-        byte[] bytes = new byte[VBANPacket.MAX_SIZE];
+        byte[] bytes = new byte[VBANPacket.MAX_SIZE_WITHOUT_HEAD];
         Arrays.fill(bytes, (byte) 'x');
         VBANOutputStream<String> vban = createTextStream();
         vban.write(bytes);
@@ -25,7 +25,7 @@ public class VBANExceptionsTest {
 
     @Test(expected = IOException.class)
     public void testStringTooLong() throws IOException {
-        byte[] bytes = new byte[VBANPacket.MAX_SIZE + 1];
+        byte[] bytes = new byte[VBANPacket.MAX_SIZE_WITHOUT_HEAD + 1];
         Arrays.fill(bytes, (byte) 'x');
         VBANOutputStream<String> vban = createTextStream();
         vban.write(bytes);
