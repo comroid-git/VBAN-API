@@ -279,13 +279,17 @@ public class VBANPacketHead<T> implements ByteArray {
                         streamName = "Stream1";
                         return;
                     case 0x20:
-                        streamName = "MIDI1";
-                        break;
-                    case 0x40:
                         sampleRate = (DataRateValue<T>) BitsPerSecond.Bps256000;
                         samples = 0;
                         channel = 0;
                         format = (FormatValue<T>) Format.BYTE8;
+                        streamName = "MIDI1";
+                        return;
+                    case 0x40:
+                        sampleRate = (DataRateValue<T>) BitsPerSecond.Bps256000;
+                        samples = 0;
+                        channel = 0;
+                        format = (FormatValue<T>) CommandFormat.ASCII;
                         // if because we are in a shared branch
                         if (streamName == null) streamName = "Command1";
                         return;
