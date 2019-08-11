@@ -2,7 +2,7 @@ language: java
 sudo: true
 
 jdk:
-  - oraclejdk8 # No more JDK 7 Support
+  - oraclejdk9 # No more JDK 7 Support
 
 script:
   - ./gradlew -v
