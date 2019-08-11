@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import de.kaleidox.util.model.ByteArray;
+import de.kaleidox.vban.model.data.AudioFrame;
 
 import static java.lang.System.arraycopy;
 
@@ -62,8 +63,8 @@ public class Util {
      * @return The byte-array that has been converted out.
      */
     public static byte[] createByteArray(Object data) {
-        // Must support types: String, ByteArray
-        if (data instanceof String) return ((String) data).getBytes(StandardCharsets.UTF_8);
+        // Must support types: CharSequence, ByteArray
+        if (data instanceof CharSequence) return ((CharSequence) data).toString().getBytes(StandardCharsets.UTF_8);
         else if (data instanceof ByteArray) return ((ByteArray) data).getBytes();
         else throw new IllegalArgumentException("Unknown Data Type! Please contact the developer.");
     }
