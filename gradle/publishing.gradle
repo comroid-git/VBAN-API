@@ -62,7 +62,7 @@ task generateGitHubPom(type: GenerateMavenPom) {
     pom = publishing.publications.mavenJava.pom
 }
 
-if (!System.getenv().contains("JITPACK")) {
+if (!System.getenv().containsKey("JITPACK")) {
     apply plugin: 'signing'
     
     signing {
