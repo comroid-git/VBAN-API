@@ -14,20 +14,20 @@ apply from: 'gradle/vars.gradle'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
+wrapper {
+    gradleVersion = '5.2'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
-    classifier = "sources"
+    archiveClassifier = "sources"
 }
 
 task javadocJar(type: Jar) {
     javadoc
     from javadoc.destinationDir
-    classifier = "javadoc"
+    archiveClassifier = "javadoc"
 }
 
 javadoc {
