@@ -1,5 +1,4 @@
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
 apply plugin: "io.codearte.nexus-staging"
 
 publishing {
@@ -63,9 +62,13 @@ task generateGitHubPom(type: GenerateMavenPom) {
     pom = publishing.publications.mavenJava.pom
 }
 
-signing {
-    useGpgCmd()
-    sign publishing.publications.mavenJava
+if (!System.getEnv().contains("JITPACK")) {
+    apply plugin: 'signing'
+    
+    signing {
+        useGpgCmd()
+        sign publishing.publications.mavenJava
+    }
 }
 
 tasks.removeAll([promoteRepository, closeAndPromoteRepository, getStagingProfile])
