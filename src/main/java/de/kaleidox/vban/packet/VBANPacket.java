@@ -25,6 +25,8 @@ public class VBANPacket<T> implements ByteArray {
     private VBANPacket(VBANPacketHead<T> head) {
         this.head = head;
         this.unfinishedByteArray = new UnfinishedByteArray(MAX_SIZE, true);
+
+        unfinishedByteArray.append(head.getBytes());
     }
 
     public VBANPacket(VBANPacketHead<T> head, byte[] data) {
