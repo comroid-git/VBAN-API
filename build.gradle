@@ -4,10 +4,9 @@ buildscript {
 }
 
 apply plugin: 'java-library'
-apply plugin: 'groovy'
 
 group 'de.kaleidox'
-version '1.0.0'
+version '1.0.1'
 
 apply from: 'gradle/vars.gradle'
 
@@ -25,15 +24,24 @@ task sourcesJar(type: Jar) {
 }
 
 task javadocJar(type: Jar) {
-    javadoc
+    doFirst {
+        javadoc
+    }
+    
     from javadoc.destinationDir
     archiveClassifier = "javadoc"
 }
 
 javadoc {
     source = sourceSets.main.java
-    options.encoding = 'UTF-8'
-    options.destinationDirectory(file("./docs/"))
+    options {
+        encoding = 'UTF-8'
+        destinationDirectory(file("./docs/"))
+        links = [
+                "https://docs.oracle.com/javase/8/docs/api/",
+                "https://docs.oracle.com/javaee/7/api/"
+        ]
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -48,7 +56,7 @@ dependencies {
 
 sourceSets {
     main.java.srcDirs = ["src\\main\\java"]
-    test.groovy.srcDirs = ["src\\test\\groovy"]
+    test.java.srcDirs = ["src\\test\\java"]
 }
 
 apply from: 'gradle/publishing.gradle'
