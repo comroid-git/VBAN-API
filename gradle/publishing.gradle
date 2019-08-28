@@ -2,8 +2,6 @@ apply plugin: 'maven-publish'
 apply plugin: "io.codearte.nexus-staging"
 
 publishing {
-    test
-
     repositories {
         maven {
             url = snapshot
