@@ -3,10 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.kaleidox</groupId>
-  <artifactId>vban</artifactId>
-  <version>0.3.2</version>
+  <artifactId>vban-api</artifactId>
+  <version>1.0.1</version>
   <name>VBAN-API</name>
   <description>Java 7 compatible Library for communicating with the VB-Audio VBAN interface</description>
+  <url>https://github.com/burdoto/VBAN-API</url>
   <inceptionYear>2019</inceptionYear>
   <licenses>
     <license>
@@ -21,4 +22,9 @@
       <email>burdoto@outlook.com</email>
     </developer>
   </developers>
+  <scm>
+    <connection>scm:git:git://github.com/burdoto/VBAN-API.git</connection>
+    <developerConnection>scm:git:ssh://github.com/burdoto/VBAN-API.git</developerConnection>
+    <url>https://github.com/burdoto/VBAN-API</url>
+  </scm>
 </project>
