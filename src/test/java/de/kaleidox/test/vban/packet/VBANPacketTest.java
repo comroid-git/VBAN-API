@@ -52,7 +52,7 @@ public class VBANPacketTest {
     @Test
     public void testHeadDecomposing() throws InvalidPacketAttributeException {
         byte[] bytes = new byte[VBANPacket.MAX_SIZE_WITHOUT_HEAD];
-        
+
         VBANPacket generated = factory.create();
         generated.setData(bytes);
 

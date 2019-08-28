@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import de.kaleidox.util.model.ByteArray;
-import de.kaleidox.vban.model.data.AudioFrame;
 
 import static java.lang.System.arraycopy;
 

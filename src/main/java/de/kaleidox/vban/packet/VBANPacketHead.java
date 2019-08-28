@@ -37,13 +37,13 @@ public class VBANPacketHead<T> implements ByteArray {
     }
 
     public VBANPacketHead(int protocol,
-                           int sampleRateIndex,
-                           int samples,
-                           int channel,
-                           int format,
-                           int codec,
-                           String streamName,
-                           int frameCounter) {
+                          int sampleRateIndex,
+                          int samples,
+                          int channel,
+                          int format,
+                          int codec,
+                          String streamName,
+                          int frameCounter) {
         checkRange(samples, 0, 255);
         checkRange(channel, 0, 255);
 

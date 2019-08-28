@@ -42,6 +42,7 @@ public class VBANOutputStreamTest {
             throw filter;
         }
     }
+
     @Test
     public void testStringWithinBounds() throws IOException {
         byte[] bytes = new byte[VBANPacket.MAX_SIZE_WITHOUT_HEAD];
