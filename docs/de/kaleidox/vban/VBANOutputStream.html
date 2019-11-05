@@ -48,11 +48,11 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../de/kaleidox/vban/VBANInputStream.html" title="class in de.kaleidox.vban"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../de/comroid/vban/VBANInputStream.html" title="class in de.comroid.vban"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
-<li><a href="../../../index.html?de/kaleidox/vban/VBANOutputStream.html" target="_top">Frames</a></li>
+<li><a href="../../../index.html?de/comroid/vban/VBANOutputStream.html" target="_top">Frames</a></li>
 <li><a href="VBANOutputStream.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
@@ -91,7 +91,7 @@ var activeTableTab = "activeTableTab";
 <!-- ========= END OF TOP NAVBAR ========= -->
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">de.kaleidox.vban</div>
+<div class="subTitle">de.comroid.vban</div>
 <h2 title="Class VBANOutputStream" class="title">Class VBANOutputStream&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
@@ -102,7 +102,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">java.io.OutputStream</a></li>
 <li>
 <ul class="inheritance">
-<li>de.kaleidox.vban.VBANOutputStream&lt;T&gt;</li>
+<li>de.comroid.vban.VBANOutputStream&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -137,7 +137,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../de/kaleidox/vban/VBANOutputStream.html#VBANOutputStream-de.kaleidox.util.model.Factory-java.net.InetAddress-int-">VBANOutputStream</a></span>(<a href="../../../de/kaleidox/util/model/Factory.html" title="interface in de.kaleidox.util.model">Factory</a>&lt;<a href="../../../de/kaleidox/vban/packet/VBANPacket.html" title="class in de.kaleidox.vban.packet">VBANPacket</a>&lt;<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;&gt;&nbsp;packetFactory,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../de/comroid/vban/VBANOutputStream.html#VBANOutputStream-de.comroid.util.model.Factory-java.net.InetAddress-int-">VBANOutputStream</a></span>(<a href="../../../de/comroid/util/model/Factory.html" title="interface in de.comroid.util.model">Factory</a>&lt;<a href="../../../de/comroid/vban/packet/VBANPacket.html" title="class in de.comroid.vban.packet">VBANPacket</a>&lt;<a href="../../../de/comroid/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;&gt;&nbsp;packetFactory,
                 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">InetAddress</a>&nbsp;address,
                 int&nbsp;port)</code>
 <div class="block">Private constructor.</div>
@@ -160,26 +160,26 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/kaleidox/vban/VBANOutputStream.html#close--">close</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/comroid/vban/VBANOutputStream.html#close--">close</a></span>()</code>
 <div class="block">Drops the Socket and PacketFactory object and marks this stream as <code>closed.</code></div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/kaleidox/vban/VBANOutputStream.html#flush--">flush</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/comroid/vban/VBANOutputStream.html#flush--">flush</a></span>()</code>
 <div class="block">Sends this stream's byte buffer to the specified <a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">address</a> on the specified <code>port</code>,
  then clears the byte buffer.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="class in de.kaleidox.vban">VBANOutputStream</a>&lt;<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/kaleidox/vban/VBANOutputStream.html#sendData-T-">sendData</a></span>(<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&nbsp;data)</code>
+<td class="colFirst"><code><a href="../../../de/comroid/vban/VBANOutputStream.html" title="class in de.comroid.vban">VBANOutputStream</a>&lt;<a href="../../../de/comroid/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/comroid/vban/VBANOutputStream.html#sendData-T-">sendData</a></span>(<a href="../../../de/comroid/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&nbsp;data)</code>
 <div class="block">Tries to send the given data to the specified <a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">address</a> on the specified <code>port</code>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/kaleidox/vban/VBANOutputStream.html#write-int-">write</a></span>(int&nbsp;b)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../de/comroid/vban/VBANOutputStream.html#write-int-">write</a></span>(int&nbsp;b)</code>
 <div class="block">Writes one byte to this stream's byte buffer, but does not send anything.</div>
 </td>
 </tr>
@@ -212,17 +212,17 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="VBANOutputStream-de.kaleidox.util.model.Factory-java.net.InetAddress-int-">
+<a name="VBANOutputStream-de.comroid.util.model.Factory-java.net.InetAddress-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VBANOutputStream</h4>
-<pre>public&nbsp;VBANOutputStream(<a href="../../../de/kaleidox/util/model/Factory.html" title="interface in de.kaleidox.util.model">Factory</a>&lt;<a href="../../../de/kaleidox/vban/packet/VBANPacket.html" title="class in de.kaleidox.vban.packet">VBANPacket</a>&lt;<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;&gt;&nbsp;packetFactory,
+<pre>public&nbsp;VBANOutputStream(<a href="../../../de/comroid/util/model/Factory.html" title="interface in de.comroid.util.model">Factory</a>&lt;<a href="../../../de/comroid/vban/packet/VBANPacket.html" title="class in de.comroid.vban.packet">VBANPacket</a>&lt;<a href="../../../de/comroid/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;&gt;&nbsp;packetFactory,
                         <a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">InetAddress</a>&nbsp;address,
                         int&nbsp;port)
                  throws <a href="https://docs.oracle.com/javase/8/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</a></pre>
-<div class="block">Private constructor. Use <a href="../../../de/kaleidox/vban/VBAN.html#openMidiOutputStream-de.kaleidox.util.model.Factory-java.net.InetAddress-int-"><code>VBAN.openMidiOutputStream(Factory, InetAddress, int)</code></a> for creating raw instances.</div>
+<div class="block">Private constructor. Use <a href="../../../de/comroid/vban/VBAN.html#openMidiOutputStream-de.comroid.util.model.Factory-java.net.InetAddress-int-"><code>VBAN.openMidiOutputStream(Factory, InetAddress, int)</code></a> for creating raw instances.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packetFactory</code> - A factory that creates new instances of VBANPacket. See <code>VBANPacket.Factory.Builder</code></dd>
@@ -249,18 +249,18 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 <ul class="blockList">
 <li class="blockList">
 <h4>sendData</h4>
-<pre>public&nbsp;<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="class in de.kaleidox.vban">VBANOutputStream</a>&lt;<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;&nbsp;sendData(<a href="../../../de/kaleidox/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&nbsp;data)
+<pre>public&nbsp;<a href="../../../de/comroid/vban/VBANOutputStream.html" title="class in de.comroid.vban">VBANOutputStream</a>&lt;<a href="../../../de/comroid/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&gt;&nbsp;sendData(<a href="../../../de/comroid/vban/VBANOutputStream.html" title="type parameter in VBANOutputStream">T</a>&nbsp;data)
                              throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
 <div class="block">Tries to send the given data to the specified <a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">address</a> on the specified <code>port</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - The data to send. Is converted to a bytearray using
-             <a href="../../../de/kaleidox/vban/Util.html#createByteArray-java.lang.Object-"><code>Util.createByteArray(Object)</code></a>.</dd>
+             <a href="../../../de/comroid/vban/Util.html#createByteArray-java.lang.Object-"><code>Util.createByteArray(Object)</code></a>.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The instance of the stream.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If the stream has been <a href="../../../de/kaleidox/vban/VBANOutputStream.html#close--">closed</a> before.</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If the stream has been <a href="../../../de/comroid/vban/VBANOutputStream.html#close--">closed</a> before.</dd>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - See <a href="https://docs.oracle.com/javase/8/docs/api/java/net/DatagramSocket.html?is-external=true#send-java.net.DatagramPacket-" title="class or interface in java.net"><code>DatagramSocket.send(DatagramPacket)</code></a> for details.</dd>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - If the converted byte-array from the given data is too large.</dd>
 </dl>
@@ -275,7 +275,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 <pre>public&nbsp;void&nbsp;write(int&nbsp;b)
            throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Writes one byte to this stream's byte buffer, but does not send anything.
- The byte buffer is being sent and cleared by invoking <a href="../../../de/kaleidox/vban/VBANOutputStream.html#flush--"><code>flush()</code></a>.
+ The byte buffer is being sent and cleared by invoking <a href="../../../de/comroid/vban/VBANOutputStream.html#flush--"><code>flush()</code></a>.
  If the character-code of <code>\n</code> is written, the stream is flushed,
  to ensure a 1:1 ratio of lines:writes.</div>
 <dl>
@@ -284,7 +284,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>b</code> - The byte as an int to append.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If the stream has been <a href="../../../de/kaleidox/vban/VBANOutputStream.html#close--">closed</a> before.</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If the stream has been <a href="../../../de/comroid/vban/VBANOutputStream.html#close--">closed</a> before.</dd>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - See <a href="https://docs.oracle.com/javase/8/docs/api/java/net/DatagramSocket.html?is-external=true#send-java.net.DatagramPacket-" title="class or interface in java.net"><code>DatagramSocket.send(DatagramPacket)</code></a> for details.</dd>
 </dl>
 </li>
@@ -305,7 +305,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html?is-external=true#flush--" title="class or interface in java.io">flush</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If the stream has been <a href="../../../de/kaleidox/vban/VBANOutputStream.html#close--">closed</a> before.</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If the stream has been <a href="../../../de/comroid/vban/VBANOutputStream.html#close--">closed</a> before.</dd>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - See <a href="https://docs.oracle.com/javase/8/docs/api/java/net/DatagramSocket.html?is-external=true#send-java.net.DatagramPacket-" title="class or interface in java.net"><code>DatagramSocket.send(DatagramPacket)</code></a> for details.</dd>
 </dl>
 </li>
@@ -356,11 +356,11 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../de/kaleidox/vban/VBANInputStream.html" title="class in de.kaleidox.vban"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../de/comroid/vban/VBANInputStream.html" title="class in de.comroid.vban"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
-<li><a href="../../../index.html?de/kaleidox/vban/VBANOutputStream.html" target="_top">Frames</a></li>
+<li><a href="../../../index.html?de/comroid/vban/VBANOutputStream.html" target="_top">Frames</a></li>
 <li><a href="VBANOutputStream.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_bottom">

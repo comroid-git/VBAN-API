@@ -28,7 +28,7 @@ publishing {
                 name = projectName
                 description = projectDescription
                 inceptionYear = '2019'
-                url = 'https://github.com/burdoto/VBAN-API'
+                url = 'https://github.com/comroid-git/VBAN-API'
 
                 licenses {
                     license {
@@ -41,14 +41,14 @@ publishing {
                     developer {
                         id = "burdoto"
                         name = "Tobias Burdow"
-                        email = "burdoto@outlook.com"
+                        email = "webmaster@kaleidox.de"
                     }
                 }
 
                 scm {
-                    connection = 'scm:git:git://github.com/burdoto/VBAN-API.git'
-                    developerConnection = 'scm:git:ssh://github.com/burdoto/VBAN-API.git'
-                    url = 'https://github.com/burdoto/VBAN-API'
+                    connection = 'scm:git:git://github.com/comroid-git/VBAN-API.git'
+                    developerConnection = 'scm:git:ssh://github.com/comroid-git/VBAN-API.git'
+                    url = 'https://github.com/comroid-git/VBAN-API'
                 }
             }
         }

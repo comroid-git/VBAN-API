@@ -1,4 +1,4 @@
-# VBAN-API [![Build Status](https://github.com/burdoto/VBAN-API/workflows/Build%20Tests/badge.svg)](https://github.com/burdoto/VBAN-API/actions) [![Javadocs](http://javadoc.io/badge/de.kaleidox/vban-api.svg)](http://javadoc.io/doc/de.kaleidox/vban-api) [![Maven Central Release](https://maven-badges.herokuapp.com/maven-central/de.kaleidox/vban-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.kaleidox/vban-api) [![Development Release](https://jitpack.io/v/burdoto/VBAN-API.svg)](https://jitpack.io/#burdoto/VBAN-API)
+# VBAN-API [![Build Status](https://github.com/comroid-git/VBAN-API/workflows/Build%20Tests/badge.svg)](https://github.com/comroid-git/VBAN-API/actions) [![Javadocs](http://javadoc.io/badge/de.comroid/vban-api.svg)](http://javadoc.io/doc/de.comroid/vban-api) [![Maven Central Release](https://maven-badges.herokuapp.com/maven-central/de.comroid/vban-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.comroid/vban-api) [![Development Release](https://jitpack.io/v/comroid-git/VBAN-API.svg)](https://jitpack.io/#comroid-git/VBAN-API)
 API for the known VB-Audio VBAN Network interface
 
 
@@ -12,6 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'de.kaleidox:vban-api:1.0.1'
+    implementation 'de.comroid:vban-api:1.0.1'
 }
 ```

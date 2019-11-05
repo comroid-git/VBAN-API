@@ -1,6 +1,6 @@
-de.kaleidox.util.model
-de.kaleidox.vban
-de.kaleidox.vban.exception
-de.kaleidox.vban.model
-de.kaleidox.vban.model.data
-de.kaleidox.vban.packet
+de.comroid.util.model
+de.comroid.vban
+de.comroid.vban.exception
+de.comroid.vban.model
+de.comroid.vban.model.data
+de.comroid.vban.packet

@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"de.kaleidox.util.model"},{"l":"de.kaleidox.vban"},{"l":"de.kaleidox.vban.model"},{"l":"de.kaleidox.vban.packet"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"de.comroid.util.model"},{"l":"de.comroid.vban"},{"l":"de.comroid.vban.model"},{"l":"de.comroid.vban.packet"}]

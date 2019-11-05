@@ -2,12 +2,12 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.kaleidox</groupId>
+  <groupId>de.comroid</groupId>
   <artifactId>vban-api</artifactId>
   <version>1.0.1</version>
   <name>VBAN-API</name>
   <description>Java 7 compatible Library for communicating with the VB-Audio VBAN interface</description>
-  <url>https://github.com/burdoto/VBAN-API</url>
+  <url>https://github.com/comroid-git/VBAN-API</url>
   <inceptionYear>2019</inceptionYear>
   <licenses>
     <license>
@@ -19,12 +19,12 @@
     <developer>
       <id>burdoto</id>
       <name>Tobias Burdow</name>
-      <email>burdoto@outlook.com</email>
+      <email>webmaster@kaleidox.de</email>
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/burdoto/VBAN-API.git</connection>
-    <developerConnection>scm:git:ssh://github.com/burdoto/VBAN-API.git</developerConnection>
-    <url>https://github.com/burdoto/VBAN-API</url>
+    <connection>scm:git:git://github.com/comroid-git/VBAN-API.git</connection>
+    <developerConnection>scm:git:ssh://github.com/comroid-git/VBAN-API.git</developerConnection>
+    <url>https://github.com/comroid-git/VBAN-API</url>
   </scm>
 </project>

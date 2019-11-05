@@ -5,7 +5,7 @@ buildscript {
 
 apply plugin: 'java-library'
 
-group 'de.kaleidox'
+group 'de.comroid'
 version '1.0.1'
 
 apply from: 'gradle/vars.gradle'
