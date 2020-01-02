@@ -50,7 +50,7 @@ repositories.jcenter()
 dependencies {
     compileOnly 'org.jetbrains:annotations:18.0.0'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testCompile 'org.codehaus.groovy:groovy-all:2.5.7'
 }
 
