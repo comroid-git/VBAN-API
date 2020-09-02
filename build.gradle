@@ -48,7 +48,7 @@ compileJava.options.encoding = 'UTF-8'
 repositories.jcenter()
 
 dependencies {
-    compileOnly 'org.jetbrains:annotations:18.0.0'
+    compileOnly 'org.jetbrains:annotations:20.1.0'
 
     testImplementation 'junit:junit:4.12'
     testCompile 'org.codehaus.groovy:groovy-all:2.5.7'
