@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 import de.comroid.vban.VBAN;
-import de.comroid.vban.VBANOutputStream;
 import de.comroid.vban.model.data.AudioFrame;
 import de.comroid.vban.model.data.MIDICommand;
 import de.comroid.vban.packet.VBANPacket;

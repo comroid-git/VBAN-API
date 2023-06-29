@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel>
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.28/a2ff5da8bcd8b1b26f36b806ced63213362c6dcc/lombok-1.18.28.jar" />
+        </processorPath>
+        <module name="VBAN-API.api.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="11">
       <module name="de.kaleidox.vban-api.compat" target="1.7" />
       <module name="de.kaleidox.vban-api.main" target="1.7" />
       <module name="de.kaleidox.vban-api.test" target="1.7" />
-      <module name="VBAN-API.main" target="1.7" />
-      <module name="VBAN-API.test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

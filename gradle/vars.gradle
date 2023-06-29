@@ -3,7 +3,7 @@ import static java.lang.System.getenv
 ext {
     artifactName = "vban-api"
     projectName = "VBAN-API"
-    projectDescription = "Java 7 compatible Library for communicating with the VB-Audio VBAN interface"
+    projectDescription = "Java Library for communicating with the VB-Audio VBAN interface"
 
     snapshot = project.version.endsWith("-SNAPSHOT")
 
